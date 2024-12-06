@@ -107,6 +107,3 @@ The application uses a dark theme defined in the `app.css` file. The theme inclu
 
 All team members contributed to the development of the Evoza Web Browser. Special thanks to Biplov Gautam for leading the team as the Scrum Master.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
