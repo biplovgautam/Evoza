@@ -15,10 +15,11 @@ Evoza Web Browser is a project developed for the LED2 course in the 2nd semester
 
 ## Features
 
-- Custom title bar with minimize, maximize, and close buttons
-- Customizable dark theme
+- Different profiles for different users in same desktop
 - Guest mode to save bookmarks and browsing histories without logging in!
 - private / incognito mode to browse without saving data
+- Custom title bar with minimize, maximize, and close buttons
+- Customizable dark theme
 - Modular design with separate UI components
 
 ## Project Structure
