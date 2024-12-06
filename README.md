@@ -3,7 +3,7 @@
 
 ## Overview
 
-Evoza Web Browser is a project developed for the LED2 course in the 2nd semester at our college. This application is designed to provide a simple and efficient web browsing experience with a custom user interface. The project is developed by a team of five members, with [Your Name] serving as the Scrum Master.
+Evoza Web Browser is a project developed for the LED2 course in the 2nd semester at our college. This application is designed to provide a simple and efficient web browsing experience with a custom user interface. The project is developed by a team of five members, with Biplov Gautam serving as the Scrum Master.
 
 ## Team Members
 
@@ -73,8 +73,8 @@ Evoza/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/evoza-web-browser.git
-   cd evoza-web-browser
+   git clone https://github.com/biplovgautam/Evoza.git
+   cd Evoza
    ```
 
 2. **Build the project**:
@@ -92,6 +92,7 @@ Evoza/
 - Java
 - JavaFX
 - Gradle
+- chromium
 
 ## Custom Title Bar
 
@@ -103,7 +104,7 @@ The application uses a dark theme defined in the `app.css` file. The theme inclu
 
 ## Contributions
 
-All team members contributed to the development of the Evoza Web Browser. Special thanks to [Your Name] for leading the team as the Scrum Master.
+All team members contributed to the development of the Evoza Web Browser. Special thanks to Biplov Gautam for leading the team as the Scrum Master.
 
 ## License
 
