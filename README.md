@@ -7,11 +7,11 @@ Evoza Web Browser is a project developed for the LED2 course in the 2nd semester
 
 ## Team Members
 
-- Biplov Gautam (Scrum Master)
-- Sabin Raj Pokhreal
-- Kalina Shrestha
-- Rohit shah
-- Prochorus Rai
+- Biplov Gautam (Scrum Master, Backend Developer, Sometimes Frontend as well)
+- Sabin Raj Pokhreal (Frontend developer and UI/UX designer)
+- Kalina Shrestha (Frontend developer and UI/UX designer)
+- Rohit shah (Backend Developer)
+- Prochorus Rai (Tester & UI/UX)
 
 ## Features
 
