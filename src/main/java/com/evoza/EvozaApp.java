@@ -1,17 +1,17 @@
 package com.evoza;
+
 import com.evoza.ui.CustomTitleBar;
 import com.evoza.ui.LandingPageUI;
+import com.evoza.utils.DatabaseHelper;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import java.io.InputStream;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.StageStyle;
 
-
-
+import java.io.InputStream;
 
 public class EvozaApp extends Application {
     @Override
@@ -19,7 +19,10 @@ public class EvozaApp extends Application {
         try {
             primaryStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
 
-            VBox root = new LandingPageUI().start(primaryStage);
+            // Initialize avatars
+            DatabaseHelper.initializeAvatars();
+
+            BorderPane root = new LandingPageUI().start(primaryStage);
             BorderPane borderPane = new BorderPane();
             borderPane.setTop(new CustomTitleBar(primaryStage)); // Add custom title bar
             borderPane.setCenter(root);
@@ -29,8 +32,8 @@ public class EvozaApp extends Application {
 
             primaryStage.setTitle("Evoza Web Browser");
             primaryStage.setScene(scene);
-            primaryStage.setResizable(false); // Allow resizing
-
+            primaryStage.setResizable(true); // Allow resizing
+            primaryStage.setMaximized(true); // Open in maximized mode
 
             // Set the application icon
             InputStream iconStream = getClass().getResourceAsStream("/images/icons/logo.png");

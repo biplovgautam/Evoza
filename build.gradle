@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation 'org.openjfx:javafx-controls:17'
     implementation 'org.openjfx:javafx-fxml:17'
+    implementation 'mysql:mysql-connector-java:8.0.26'
     // Add other JavaFX modules if needed
 }
 

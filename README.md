@@ -3,7 +3,7 @@
 
 ## Overview
 
-Evoza Web Browser is a project developed for the LED2 course in the 2nd semester at our college. This application is designed to provide a simple and efficient web browsing experience with a custom user interface. The project is developed by a team of five members, with Biplov Gautam serving as the Scrum Master.
+Evoza Web Browser is a project developed for the LED2 course in the 2nd semester at our college. This application is designed to provide a simple and efficient web browsing experience with a custom user interface. The project is developed by a team of five members.
 
 ## Team Members
 
@@ -65,7 +65,7 @@ Evoza/
 ├── config/
 │   ├── browser.properties
 ├── build.gradle
-├── pom.xml
+├── SQLqueries.sql
 ├── README.md
 └── .gitignore
 ```
