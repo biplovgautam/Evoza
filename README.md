@@ -46,15 +46,12 @@ Evoza/
 │   │   │   │   │   │   ├── DatabaseHelper.java
 │   │   ├── resources/
 │   │   │   ├── fxml/
-│   │   │   │   ├── LandingPage.fxml
-│   │   │   │   ├── CreateProfile.fxml
-│   │   │   │   ├── Browser.fxml
 │   │   │   ├── images/
 │   │   │   │   ├── avatars/
 │   │   │   │   └── icons/
 │   │   │   ├── css/
 │   │   │   │   ├── app.css
-│   │   │   │   ├── styles.css
+│   │   │   │   ├── landingpage.css
 ├── test/
 │   ├── java/
 │   │   ├── com/

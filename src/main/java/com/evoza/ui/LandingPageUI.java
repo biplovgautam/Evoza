@@ -7,6 +7,8 @@ import com.evoza.utils.ProfileFetcher;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -45,6 +47,28 @@ public class LandingPageUI {
 
         leftContainer.setStyle("-fx-background-color: #395f84;");
         rightContainer.setStyle("-fx-background-color: #9aafc0;");
+
+        // Create a clickable box for guest mode
+        HBox guestModeBox = new HBox(10);
+        guestModeBox.setPrefSize(150, 50);
+        guestModeBox.setStyle("-fx-background-color: #c5c8cc; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 50;");
+        guestModeBox.setAlignment(javafx.geometry.Pos.CENTER);
+        Image userImage = new Image(getClass().getResourceAsStream("/images/icons/user.png"));
+        ImageView guestuserimageView = new ImageView(userImage);
+        guestuserimageView.setFitHeight(30);
+        guestuserimageView.setFitWidth(30);
+        guestModeBox.getChildren().add(guestuserimageView);
+        VBox.setMargin(guestModeBox, new Insets(0, 0, 20, 0)); // Margin at the bottom
+        Text guestText = new Text("Guest/Private Mode");
+        guestText.setFill(Color.BLACK);
+        guestText.setStyle("-fx-font-size: 14;");
+        guestModeBox.getChildren().add(guestText);
+        guestModeBox.setOnMouseEntered(e -> {guestModeBox.setStyle("-fx-cursor: hand; -fx-background-color: #c5c8cc;  -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 15;");});
+        guestModeBox.setOnMouseExited(e -> {guestModeBox.setStyle("-fx-background-color: #c3c5c6; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 15;");});
+        guestModeBox.setOnMouseClicked(e -> openProfileHomePage(primaryStage,-1));
+
+        leftContainer.getChildren().addAll(guestModeBox);
+
 
         rightContainer.setAlignment(javafx.geometry.Pos.CENTER);
         rightContainer.setPadding(new Insets(10));
@@ -90,14 +114,7 @@ public class LandingPageUI {
         // Add elements to the logoTitleDescriptionContainer
         logoTitleDescriptionContainer.getChildren().addAll(logoImageView, titleText, descriptionTextFlow);
 
-        // Create a clickable box for guest mode
-        Image userImage = new Image(getClass().getResourceAsStream("/images/icons/user.png"));
-        HBox guestModeBox = createClickableBox("Guest/Private Mode", userImage);
-        guestModeBox.setOnMouseClicked(e -> openProfileHomePage(primaryStage, -1)); // Use -1 for guest mode
-        guestModeBox.setPrefSize(150, 50);
-        VBox.setMargin(guestModeBox, new Insets(0, 0, 20, 0)); // Margin at the bottom
-
-        leftContainer.getChildren().addAll(guestModeBox);
+      
 
         // Fetch profiles from the database and add them to the profilesContainer
         List<Profile> profiles = ProfileFetcher.fetchAllProfiles();
@@ -106,7 +123,7 @@ public class LandingPageUI {
         for (Profile profile : profiles) {
             Image avatarImage = AvatarFetcher.fetchAvatarById(profile.getProfilePicId());
             HBox profileBox = createClickableBox(profile.getUsername(), avatarImage);
-            profileBox.setOnMouseClicked(e -> openAuthenticationPopup(primaryStage,profile.getUsername(), profile.getProfileId()));
+            profileBox.setOnMouseClicked(e -> openAuthenticationPopup(primaryStage,profile.getUsername(), profile.getEmail(), profile.getProfileId()));
             profilesContainer.add(profileBox, column, row);
             column++;
             if (column == 5) { // Change this value to set the number of columns
@@ -131,58 +148,58 @@ public class LandingPageUI {
         mainContainer.getChildren().addAll(leftContainer, rightContainer);
         root.setCenter(mainContainer);
 
+
         return root;
     }
 
     private HBox createClickableBox(String text, Image avatarImage) {
-        HBox box = new HBox(10);
-        if (text.equals("Guest/Private Mode")) {
-            box.setPrefSize(80, 50);
-            box.setStyle("-fx-background-color: #c5c8cc; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 50;");
-        } 
-        
-        else {
-            box.setPrefSize(150, 150); // Increased size for profile boxes
-            box.setStyle("-fx-background-color: #d9d9d9; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
-        }
+        HBox box = new HBox();
+        box.setPrefSize(150, 150); // Increased size for profile boxes
+        box.setStyle("-fx-background-color: #d9d9d9; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
         box.setAlignment(javafx.geometry.Pos.CENTER);
-
+    
+        VBox vbox = new VBox(10);
+        vbox.setAlignment(javafx.geometry.Pos.CENTER);
+    
+        if (!text.equals("Add Profile")) {
+            Button editButton = new Button("...");
+            editButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-size: 14; -fx-cursor: hand;");
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem editItem = new MenuItem("Edit");
+            MenuItem removeItem = new MenuItem("Remove");
+            contextMenu.getItems().addAll(editItem, removeItem);
+            editButton.setOnMouseClicked(e -> {contextMenu.show(editButton, e.getScreenX(), e.getScreenY());});
+            HBox topRightBox = new HBox(editButton);
+            topRightBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+            topRightBox.setPadding(new Insets(-15, -35, 0, 0)); // Add top-right margin
+            vbox.getChildren().add(topRightBox);
+        }
+    
         if (avatarImage != null) {
             ImageView imageView = new ImageView(avatarImage);
-            if (text.equals("Guest/Private Mode")) {
-                imageView.setFitHeight(30);
-                imageView.setFitWidth(30);
-            }
-            else if (text.equals("Add Profile")) {
-                imageView.setFitHeight(50);
-                imageView.setFitWidth(50);
-            } 
-            else {
+            if (text.equals("Add Profile")) {
+                imageView.setFitHeight(40);
+                imageView.setFitWidth(40);
+            } else {
                 imageView.setFitHeight(70); // Increased size for profile images
                 imageView.setFitWidth(70);
             }
-            box.getChildren().add(imageView);
+            vbox.getChildren().add(imageView);
         }
-
+    
         Text boxText = new Text(text);
         boxText.setFill(Color.BLACK);
         boxText.setStyle("-fx-font-size: 14;");
-
-        box.getChildren().add(boxText);
+        vbox.getChildren().add(boxText);
+    
+        box.getChildren().add(vbox);
+    
         // Add hover effect
         box.setOnMouseEntered(e -> {
-            if (text.equals("Guest/Private Mode")) {
-                box.setStyle("-fx-cursor: hand; -fx-background-color: #c5c8cc;  -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 15;");
-            } else {
-                box.setStyle("-fx-cursor: hand; -fx-background-color: #e6e8e9;-fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
-            }
+            box.setStyle("-fx-cursor: hand; -fx-background-color: #e6e8e9;-fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
         });
         box.setOnMouseExited(e -> {
-            if (text.equals("Guest/Private Mode")) {
-                box.setStyle("-fx-background-color: #c3c5c6; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 15;");
-            } else {
-                box.setStyle("-fx-background-color: #d9d9d9; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
-            }
+            box.setStyle("-fx-background-color: #d9d9d9; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
         });
         return box;
     }
@@ -213,7 +230,8 @@ public class LandingPageUI {
         signupStage.setScene(scene);
         signupStage.showAndWait();
     }
-    private void openAuthenticationPopup(Stage primaryStage, String username, int profileId) {
+    
+    private void openAuthenticationPopup(Stage primaryStage, String username, String email, int profileId) {
         Stage authStage = new Stage();
         authStage.initModality(Modality.APPLICATION_MODAL);
         // authStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
@@ -261,6 +279,18 @@ public class LandingPageUI {
         usernameField.setPrefHeight(45);
         VBox.setMargin(usernameField, new Insets(5, 0, 0, 0)); // Add top margin
 
+        Text emailLabel = new Text("Email:");
+        emailLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
+        VBox.setMargin(emailLabel, new Insets(10, 0, 0, 0)); // Add top margin
+    
+        TextField emailField = new TextField(email);
+        emailField.setEditable(false);
+        emailField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
+        emailField.setPrefWidth(80); // Set the width
+        emailField.setPrefHeight(45);
+        VBox.setMargin(emailField, new Insets(5, 0, 0, 0)); // Add top margin
+
+
         Text passwordLabel = new Text("Password:");
         passwordLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
         VBox.setMargin(passwordLabel, new Insets(10, 0, 0, 0)); // Add top margin
@@ -270,7 +300,7 @@ public class LandingPageUI {
         passwordField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
         passwordField.setPrefWidth(80); // Set the width
         passwordField.setPrefHeight(45);
-        passwordField.setOnMouseEntered(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 45;"));
+        passwordField.setOnMouseEntered(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 40;"));
         passwordField.setOnMouseExited(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-background-radius: 50;"));
         VBox.setMargin(passwordField, new Insets(5, 0, 0, 0)); // Add top margin
 
@@ -280,7 +310,7 @@ public class LandingPageUI {
         submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;"); // Set button color and radius
         submitButton.setPrefWidth(120);
         submitButton.setPrefHeight(40);
-        VBox.setMargin(submitButton, new Insets(50, 0, 0, 0)); // Add top margin
+        VBox.setMargin(submitButton, new Insets(30, 0, 0, 0)); // Add top margin
 
         submitButton.setOnAction(e -> {
             // Use AuthenticationManager to authenticate
@@ -290,6 +320,7 @@ public class LandingPageUI {
                 authStage.close();
             } else {
                 // Show an error message or handle authentication failure
+                CustomPopupAlert.showNotification("Invalid password. Please try again.");
                 System.err.println("Authentication failed.");
             }
         });
@@ -297,7 +328,7 @@ public class LandingPageUI {
         submitButton.setOnMouseExited(e -> submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;"));
         submitbox.getChildren().addAll(submitButton);
 
-        vbox.getChildren().addAll(titleBar, titlebox, usernameLabel,usernameField, passwordLabel, passwordField, submitbox);
+        vbox.getChildren().addAll(titleBar, titlebox, usernameLabel,usernameField,emailLabel,emailField, passwordLabel, passwordField, submitbox);
 
         Scene scene = new Scene(vbox, 400, 500);
         scene.setFill(Color.TRANSPARENT); // Set the scene fill to transparent
