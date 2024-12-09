@@ -26,6 +26,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import com.evoza.browser.BrowserUtils;
 
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class LandingPageUI {
         guestModeBox.getChildren().add(guestText);
         guestModeBox.setOnMouseEntered(e -> {guestModeBox.setStyle("-fx-cursor: hand; -fx-background-color: #c5c8cc;  -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 15;");});
         guestModeBox.setOnMouseExited(e -> {guestModeBox.setStyle("-fx-background-color: #c3c5c6; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 15;");});
-        guestModeBox.setOnMouseClicked(e -> openProfileHomePage(primaryStage,-1));
+        guestModeBox.setOnMouseClicked(e -> BrowserUtils.openProfileHomePage(primaryStage, -1));
 
         leftContainer.getChildren().addAll(guestModeBox);
 
@@ -204,10 +205,7 @@ public class LandingPageUI {
         return box;
     }
 
-    private void openProfileHomePage(Stage primaryStage, int profileId) {
-        ProfileHomePage profileHomePage = new ProfileHomePage();
-        profileHomePage.start(primaryStage, profileId);
-    }
+    
 
     private void openSignupPopup() {
         Stage signupStage = new Stage();
@@ -232,107 +230,6 @@ public class LandingPageUI {
     }
     
     private void openAuthenticationPopup(Stage primaryStage, String username, String email, int profileId) {
-        Stage authStage = new Stage();
-        authStage.initModality(Modality.APPLICATION_MODAL);
-        // authStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
-        authStage.initStyle(StageStyle.TRANSPARENT);
-
-
-        VBox vbox = new VBox(10);
-        vbox.setAlignment(javafx.geometry.Pos.TOP_LEFT); // Align contents to the top center
-        vbox.setPadding(new Insets(0,20,10,20));
-        vbox.setStyle("-fx-background-color: #395f84; -fx-background-radius: 20;"); // Set background color
-
-
-        // Custom title bar
-        HBox titleBar = new HBox();
-        titleBar.setStyle("-fx-background-color: #395f84; -fx-padding: 10;");
-        titleBar.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
-        Button closeButton = new Button("X");
-        closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #ffffff; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 20;");
-        closeButton.setOnAction(e -> authStage.close());
-        closeButton.setOnMouseEntered(e -> closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #00000; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 20;"));
-        closeButton.setOnMouseExited(e -> closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #ffffff; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 20;"));
-
-
-        titleBar.getChildren().addAll(closeButton);
-        HBox.setMargin(closeButton, new Insets(0, (-22), 0, 0));
-        VBox.setMargin(titleBar, new Insets((-8), (-0), 0, 0));
-        
-        VBox titlebox = new VBox(10);
-        titlebox.setAlignment(javafx.geometry.Pos.CENTER);
-        Text titleText = new Text("Login Authentication");
-        titleText.textAlignmentProperty().set(javafx.scene.text.TextAlignment.CENTER);
-        titleText.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-fill: #ffffff;"); // Set text color
-        // VBox.setMargin(titleText, new Insets((-5), 0, 0, 0));
-        titlebox.getChildren().addAll(titleText);
-
-
-        Text usernameLabel = new Text("Username:");
-        usernameLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
-        VBox.setMargin(usernameLabel, new Insets(25, 0, 0, 0)); // Add top margin
-    
-        TextField usernameField = new TextField(username);
-        usernameField.setEditable(false);
-        usernameField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
-        usernameField.setPrefWidth(80); // Set the width
-        usernameField.setPrefHeight(45);
-        VBox.setMargin(usernameField, new Insets(5, 0, 0, 0)); // Add top margin
-
-        Text emailLabel = new Text("Email:");
-        emailLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
-        VBox.setMargin(emailLabel, new Insets(10, 0, 0, 0)); // Add top margin
-    
-        TextField emailField = new TextField(email);
-        emailField.setEditable(false);
-        emailField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
-        emailField.setPrefWidth(80); // Set the width
-        emailField.setPrefHeight(45);
-        VBox.setMargin(emailField, new Insets(5, 0, 0, 0)); // Add top margin
-
-
-        Text passwordLabel = new Text("Password:");
-        passwordLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
-        VBox.setMargin(passwordLabel, new Insets(10, 0, 0, 0)); // Add top margin
-
-        PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Enter Password");
-        passwordField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
-        passwordField.setPrefWidth(80); // Set the width
-        passwordField.setPrefHeight(45);
-        passwordField.setOnMouseEntered(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 40;"));
-        passwordField.setOnMouseExited(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-background-radius: 50;"));
-        VBox.setMargin(passwordField, new Insets(5, 0, 0, 0)); // Add top margin
-
-        VBox submitbox = new VBox(10);
-        submitbox.setAlignment(javafx.geometry.Pos.CENTER);
-        Button submitButton = new Button("Login");
-        submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;"); // Set button color and radius
-        submitButton.setPrefWidth(120);
-        submitButton.setPrefHeight(40);
-        VBox.setMargin(submitButton, new Insets(30, 0, 0, 0)); // Add top margin
-
-        submitButton.setOnAction(e -> {
-            // Use AuthenticationManager to authenticate
-            boolean isAuthenticated = AuthenticationManager.authenticate(username, passwordField.getText());
-            if (isAuthenticated) {
-                openProfileHomePage(primaryStage, profileId);
-                authStage.close();
-            } else {
-                // Show an error message or handle authentication failure
-                CustomPopupAlert.showNotification("Invalid password. Please try again.");
-                System.err.println("Authentication failed.");
-            }
-        });
-        submitButton.setOnMouseEntered(e -> submitButton.setStyle("-fx-background-color: #dadada; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 50;"));
-        submitButton.setOnMouseExited(e -> submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;"));
-        submitbox.getChildren().addAll(submitButton);
-
-        vbox.getChildren().addAll(titleBar, titlebox, usernameLabel,usernameField,emailLabel,emailField, passwordLabel, passwordField, submitbox);
-
-        Scene scene = new Scene(vbox, 400, 500);
-        scene.setFill(Color.TRANSPARENT); // Set the scene fill to transparent
-        authStage.setScene(scene);
-        authStage.showAndWait();
+        LoginAuthenticationUI.openAuthenticationPopup(primaryStage, username, email, profileId);
     }
 }

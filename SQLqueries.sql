@@ -41,3 +41,8 @@ CREATE TABLE sessions (
   expires_at TIMESTAMP,
   FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
 );
+
+INSERT INTO profiles (username, fullname, email, pass, profile_pic)
+VALUES ('Guest', 'Guest Mode', 'example@nothing.com', '123', 3);
+
+SELECT * FROM profiles;
