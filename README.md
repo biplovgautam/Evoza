@@ -11,7 +11,7 @@ Evoza Web Browser is a project developed for the LED2 course in the 2nd semester
 - Sabin Raj Pokhreal (Frontend developer and UI/UX designer)
 - Kalina Shrestha (Frontend developer and UI/UX designer)
 - Rohit shah (SQL queries / DBA)
-- Prochorus Rai (Tester & UI/UX)
+- Prochorus Rai (Backend & Tester)
 
 ## Features
 
