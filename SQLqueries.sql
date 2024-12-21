@@ -4,6 +4,7 @@ USE evoza;
 -- Create the tables for the database
 CREATE TABLE avatars (
   avatar_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  avatar_name VARCHAR(255),
   avatar_image BLOB,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -15,6 +16,7 @@ CREATE TABLE profiles (
   email VARCHAR(255),
   pass VARCHAR(255),
   profile_pic INTEGER,
+  is_active BOOLEAN DEFAULT FALSE,
   FOREIGN KEY (profile_pic) REFERENCES avatars(avatar_id)
 );
 

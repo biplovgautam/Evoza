@@ -1,7 +1,6 @@
 package com.evoza.utils;
 
 import javafx.scene.image.Image;
-
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +16,11 @@ public class AvatarFetcher {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     byte[] imageBytes = resultSet.getBytes("avatar_image");
-                    return new Image(new ByteArrayInputStream(imageBytes));
+                    if (imageBytes != null) {
+                        return new Image(new ByteArrayInputStream(imageBytes));
+                    } else {
+                        System.err.println("Avatar image is null for avatarId: " + avatarId);
+                    }
                 }
             }
         } catch (SQLException e) {

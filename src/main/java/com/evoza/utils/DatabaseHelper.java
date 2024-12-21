@@ -1,6 +1,8 @@
 package com.evoza.utils;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,29 +48,38 @@ public class DatabaseHelper {
     }
 
     private static void uploadAvatars() {
-        String[] avatarFiles = {
-            "user.png", "home.png", "work.png", "school.png",
-            "dinosaur.png", "dog.png", "bear.png", "hacker.png",
-            "panda.png", "cat.png"
-        };
-        String query = "INSERT INTO avatars (avatar_image) VALUES (LOAD_FILE(?))";
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            String avatarDirectoryPath = getAvatarDirectoryPath();
-            if (avatarDirectoryPath == null) {
-                System.err.println("Avatar directory path is null.");
-                return;
-            }
-            for (String avatarFile : avatarFiles) {
-                statement.setString(1, Paths.get(avatarDirectoryPath, avatarFile).toString());
-                statement.executeUpdate();
-            }
-            System.out.println("Avatars uploaded successfully.");
-        } catch (SQLException e) {
-            System.err.println("Failed to upload avatars.");
-            e.printStackTrace();
+    String[] avatarFiles = {
+        "dinosaur.png", "dog.png", "bear.png", "hacker.png",
+        "panda.png", "cat.png"
+    };
+    String query = "INSERT INTO avatars (avatar_name, avatar_image) VALUES (?, ?)";
+    try (Connection connection = getConnection();
+         PreparedStatement statement = connection.prepareStatement(query)) {
+        String avatarDirectoryPath = getAvatarDirectoryPath();
+        if (avatarDirectoryPath == null) {
+            System.err.println("Avatar directory path is null.");
+            return;
         }
+        System.out.println("Avatar directory path: " + avatarDirectoryPath);
+        for (String avatarFile : avatarFiles) {
+            String filePath = Paths.get(avatarDirectoryPath, avatarFile).toString();
+            String avatarName = avatarFile.substring(0, avatarFile.lastIndexOf('.')); // Extract name without extension
+            System.out.println("Uploading avatar file: " + filePath + " with name: " + avatarName);
+            byte[] imageBytes = Files.readAllBytes(Paths.get(filePath));
+            statement.setString(1, avatarName);
+            statement.setBytes(2, imageBytes);
+            int rowsAffected = statement.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+        }
+        System.out.println("Avatars uploaded successfully.");
+    } catch (SQLException e) {
+        System.err.println("Failed to upload avatars.");
+        e.printStackTrace();
+    } catch (IOException e) {
+        System.err.println("Failed to read avatar file.");
+        e.printStackTrace();
     }
+}
 
     private static String getAvatarDirectoryPath() {
         try {

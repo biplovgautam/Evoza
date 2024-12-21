@@ -32,8 +32,10 @@ import com.evoza.browser.BrowserUtils;
 import java.util.List;
 
 public class LandingPageUI {
-    public BorderPane start(Stage primaryStage) {
-        BorderPane root = new BorderPane();
+    private static BorderPane root;
+
+    public static BorderPane createRoot(Stage primaryStage) {
+        root = new BorderPane();
 
         HBox mainContainer = new HBox();
         VBox leftContainer = new VBox();
@@ -54,7 +56,7 @@ public class LandingPageUI {
         guestModeBox.setPrefSize(150, 50);
         guestModeBox.setStyle("-fx-background-color: #c5c8cc; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 50; -fx-border-radius: 50;");
         guestModeBox.setAlignment(javafx.geometry.Pos.CENTER);
-        Image userImage = new Image(getClass().getResourceAsStream("/images/icons/user.png"));
+        Image userImage = new Image(LandingPageUI.class.getResourceAsStream("/images/icons/user.png"));
         ImageView guestuserimageView = new ImageView(userImage);
         guestuserimageView.setFitHeight(30);
         guestuserimageView.setFitWidth(30);
@@ -85,7 +87,7 @@ public class LandingPageUI {
         profilesContainer.setAlignment(javafx.geometry.Pos.CENTER);
 
         // Add circular logo image above the title text
-        Image logoImage = new Image(getClass().getResourceAsStream("/images/icons/logo.png"));
+        Image logoImage = new Image(LandingPageUI.class.getResourceAsStream("/images/icons/logo.png"));
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitHeight(100);
         logoImageView.setFitWidth(100);
@@ -134,10 +136,10 @@ public class LandingPageUI {
         }
 
         // Add a clickable box for adding a new profile
-        Image adduser = new Image(getClass().getResourceAsStream("/images/icons/add-user.png"));
+        Image adduser = new Image(LandingPageUI.class.getResourceAsStream("/images/icons/add-user.png"));
         
         HBox addProfileBox = createClickableBox("Add Profile", adduser);
-        addProfileBox.setOnMouseClicked(e -> openSignupPopup());
+        addProfileBox.setOnMouseClicked(e -> openSignupPopup(primaryStage));
         profilesContainer.add(addProfileBox, column, row);
 
         // Add containers to the rightContainer
@@ -152,8 +154,25 @@ public class LandingPageUI {
 
         return root;
     }
+    // public static void BorderPane(Stage primaryStage) {
+    //     root = createRoot(primaryStage);
+    //     primaryStage.setScene(new Scene(root, 800, 600));
+    //     primaryStage.show();
+    // }
+    public static BorderPane start(Stage primaryStage) {
+        root = createRoot(primaryStage);
+        return root;
+    }
 
-    private HBox createClickableBox(String text, Image avatarImage) {
+    public static void refresh(Stage primaryStage) {
+        // Clear existing content
+        root.getChildren().clear();
+        // Reinitialize the UI components
+        BorderPane newRoot = createRoot(primaryStage);
+        root.setCenter(newRoot.getCenter());
+    }
+
+    public static HBox createClickableBox(String text, Image avatarImage) {
         HBox box = new HBox();
         box.setPrefSize(150, 150); // Increased size for profile boxes
         box.setStyle("-fx-background-color: #d9d9d9; -fx-border-color: #000000; -fx-border-width: 0px; -fx-background-radius: 15; -fx-border-radius: 15;");
@@ -207,29 +226,31 @@ public class LandingPageUI {
 
     
 
-    private void openSignupPopup() {
-        Stage signupStage = new Stage();
-        signupStage.initModality(Modality.APPLICATION_MODAL);
-        signupStage.initStyle(StageStyle.UTILITY);
+    // private void openSignupPopup() {
+    //     Stage signupStage = new Stage();
+    //     signupStage.initModality(Modality.APPLICATION_MODAL);
+    //     signupStage.initStyle(StageStyle.UTILITY);
 
-        VBox vbox = new VBox(10);
-        vbox.setAlignment(javafx.geometry.Pos.CENTER);
-        vbox.setPadding(new Insets(10));
+    //     VBox vbox = new VBox(10);
+    //     vbox.setAlignment(javafx.geometry.Pos.CENTER);
+    //     vbox.setPadding(new Insets(10));
 
-        Text titleText = new Text("Sign Up");
-        titleText.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+    //     Text titleText = new Text("Sign Up");
+    //     titleText.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
 
-        // Add more UI components for signup form here
-        // For example, TextFields for username, email, password, etc.
+    //     // Add more UI components for signup form here
+    //     // For example, TextFields for username, email, password, etc.
 
-        vbox.getChildren().add(titleText);
+    //     vbox.getChildren().add(titleText);
 
-        Scene scene = new Scene(vbox, 300, 200);
-        signupStage.setScene(scene);
-        signupStage.showAndWait();
+    //     Scene scene = new Scene(vbox, 300, 200);
+    //     signupStage.setScene(scene);
+    //     signupStage.showAndWait();
+    // }
+    public static void openSignupPopup(Stage primaryStage) {
+        SignupAuthenticationUI.openSignupPopup(primaryStage);
     }
-    
-    private void openAuthenticationPopup(Stage primaryStage, String username, String email, int profileId) {
+    public static void openAuthenticationPopup(Stage primaryStage, String username, String email, int profileId) {
         LoginAuthenticationUI.openAuthenticationPopup(primaryStage, username, email, profileId);
     }
 }

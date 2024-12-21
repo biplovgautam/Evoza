@@ -3,6 +3,8 @@ package com.evoza;
 import com.evoza.ui.CustomTitleBar;
 import com.evoza.ui.LandingPageUI;
 import com.evoza.utils.DatabaseHelper;
+import com.evoza.utils.EmailUtil;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -21,8 +23,9 @@ public class EvozaApp extends Application {
 
             // Initialize avatars
             DatabaseHelper.initializeAvatars();
+            
 
-            BorderPane root = new LandingPageUI().start(primaryStage);
+            BorderPane root = LandingPageUI.start(primaryStage);
             BorderPane borderPane = new BorderPane();
             borderPane.setTop(new CustomTitleBar(primaryStage)); // Add custom title bar
             borderPane.setCenter(root);

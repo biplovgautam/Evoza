@@ -11,6 +11,8 @@ dependencies {
     implementation 'org.openjfx:javafx-controls:17'
     implementation 'org.openjfx:javafx-fxml:17'
     implementation 'mysql:mysql-connector-java:8.0.26'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'io.github.cdimascio:dotenv-java:2.2.0'
     // Add other JavaFX modules if needed
 }
 
