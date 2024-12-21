@@ -65,6 +65,7 @@ Evoza/
 ├── SQLqueries.sql
 ├── README.md
 └── .gitignore
+└── .env
 ```
 
 ## How to Run
@@ -74,13 +75,23 @@ Evoza/
    git clone https://github.com/biplovgautam/Evoza.git
    cd Evoza
    ```
+2. **Run sql queries**:
 
-2. **Build the project**:
+   run all those quires which is inside SQLqueries.sql file.    
+
+3. **Create .env file**:
+
+   add youremail and app password as inside .env:
+
+   EMAIL_USERNAME=your@gmail.com
+   EMAIL_PASSWORD=cyyb rmdd ibmi eftm   
+
+4. **Build the project**:
    ```bash
    gradle build
    ```
 
-3. **Run the application**:
+5. **Run the application**:
    ```bash
    gradle run
    ```
@@ -90,20 +101,16 @@ Evoza/
 - Java
 - JavaFX
 - Gradle
-- chromium
+- javawebview
 
 ## Custom Title Bar
 
 The custom title bar includes the application logo, title, and window control buttons (minimize, maximize, close). It is implemented in the `CustomTitleBar.java` file.
 
-## Dark Theme
-
-The application uses a dark theme defined in the `app.css` file. The theme includes a gradient background and styled buttons.
 
 ## Contributions
 
 All team members contributed to the development of the Evoza Web Browser. Special thanks to Biplov Gautam for leading the team as the Scrum Master.
 
 
-## pull test
-## pull test 2
+
