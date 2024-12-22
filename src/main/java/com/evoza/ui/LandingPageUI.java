@@ -226,27 +226,6 @@ public class LandingPageUI {
 
     
 
-    // private void openSignupPopup() {
-    //     Stage signupStage = new Stage();
-    //     signupStage.initModality(Modality.APPLICATION_MODAL);
-    //     signupStage.initStyle(StageStyle.UTILITY);
-
-    //     VBox vbox = new VBox(10);
-    //     vbox.setAlignment(javafx.geometry.Pos.CENTER);
-    //     vbox.setPadding(new Insets(10));
-
-    //     Text titleText = new Text("Sign Up");
-    //     titleText.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
-
-    //     // Add more UI components for signup form here
-    //     // For example, TextFields for username, email, password, etc.
-
-    //     vbox.getChildren().add(titleText);
-
-    //     Scene scene = new Scene(vbox, 300, 200);
-    //     signupStage.setScene(scene);
-    //     signupStage.showAndWait();
-    // }
     public static void openSignupPopup(Stage primaryStage) {
         SignupAuthenticationUI.openSignupPopup(primaryStage);
     }

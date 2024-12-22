@@ -2,6 +2,7 @@ package com.evoza;
 
 import com.evoza.ui.CustomTitleBar;
 import com.evoza.ui.LandingPageUI;
+import com.evoza.ui.ProfileHomePage;
 import com.evoza.utils.DatabaseHelper;
 import com.evoza.utils.EmailUtil;
 
@@ -24,19 +25,21 @@ public class EvozaApp extends Application {
             // Initialize avatars
             DatabaseHelper.initializeAvatars();
             
+            openProfileHomePage(primaryStage);
 
-            BorderPane root = LandingPageUI.start(primaryStage);
-            BorderPane borderPane = new BorderPane();
-            borderPane.setTop(new CustomTitleBar(primaryStage)); // Add custom title bar
-            borderPane.setCenter(root);
 
-            Scene scene = new Scene(borderPane, 1024, 768);
-            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+            // BorderPane root = LandingPageUI.start(primaryStage);
+            // BorderPane borderPane = new BorderPane();
+            // borderPane.setTop(new CustomTitleBar(primaryStage)); // Add custom title bar
+            // borderPane.setCenter(root);
 
-            primaryStage.setTitle("Evoza Web Browser");
-            primaryStage.setScene(scene);
-            primaryStage.setResizable(true); // Allow resizing
-            primaryStage.setMaximized(true); // Open in maximized mode
+            // Scene scene = new Scene(borderPane, 1024, 768);
+            // scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
+
+            // primaryStage.setTitle("Evoza Web Browser");
+            // primaryStage.setScene(scene);
+            // primaryStage.setResizable(true); // Allow resizing
+            // primaryStage.setMaximized(true); // Open in maximized mode
 
             // Set the application icon
             InputStream iconStream = getClass().getResourceAsStream("/images/icons/logo.png");
@@ -54,5 +57,9 @@ public class EvozaApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+    public void openProfileHomePage(Stage primaryStage) {
+        ProfileHomePage profileHomePage = new ProfileHomePage();
+        profileHomePage.start(primaryStage, 2);
     }
 }

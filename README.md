@@ -51,7 +51,9 @@ Evoza/
 │   │   │   │   └── icons/
 │   │   │   ├── css/
 │   │   │   │   ├── app.css
-│   │   │   │   ├── landingpage.css
+│   │   │   │   ├── newtab.css
+│   │   │   ├── templates/
+│   │   │   │   ├── newtabtemplate.html
 ├── test/
 │   ├── java/
 │   │   ├── com/

@@ -13,12 +13,14 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.26'
     implementation 'com.sun.mail:javax.mail:1.6.2'
     implementation 'io.github.cdimascio:dotenv-java:2.2.0'
+    implementation 'org.openjfx:javafx-web:17'
+
     // Add other JavaFX modules if needed
 }
 
 javafx {
     version = "17"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web' ]
 }
 
 application {
