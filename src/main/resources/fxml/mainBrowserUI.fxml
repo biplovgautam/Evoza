@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evoza.ui.ProfileHomePage">
+    <!-- Top Section: Custom Title Bar -->
+    <top>
+        <HBox fx:id="customTitleBar" spacing="10" style="-fx-background-color: #9aafc0; -fx-text-fill: #fff;">
+            <ImageView fx:id="logo" fitHeight="20" fitWidth="20" />
+            <Label text="Evoza Web Browser" style="-fx-text-fill: #fff;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox fx:id="tabButtonsArea" spacing="10" style="-fx-background-color: #9aafc0;">
+                <Button fx:id="addTabButton" text="+" onAction="#addNewTab" />
+            </HBox>
+            <Button fx:id="minimizeButton" text="-" onAction="#minimizeWindow" />
+            <Button fx:id="maximizeButton" text="[]" onAction="#maximizeWindow" />
+            <Button fx:id="closeButton" text="X" onAction="#closeWindow" />
+        </HBox>
+    </top>
+
+    <!-- Center Section: Toolbar and Content Area -->
+    <center>
+        <VBox>
+            <!-- Toolbar with navigation buttons -->
+            <HBox fx:id="toolbar" spacing="10" padding="10" style="-fx-background-color: #ddd;">
+                <Button fx:id="backButton" text="<" onAction="#navigateBack" />
+                <Button fx:id="forwardButton" text=">" onAction="#navigateForward" />
+                <Button fx:id="refreshButton" text="⟳" onAction="#refreshPage" />
+                <Button fx:id="homeButton" text="🏠" onAction="#loadHomePage" />
+                <TextField fx:id="searchBar" prefWidth="400" />
+                <Button fx:id="goButton" text="Go" onAction="#loadURL" />
+            </HBox>
+
+            <!-- Web content area and dynamic tabs -->
+            <StackPane fx:id="contentArea">
+                <!-- WebView tabs will be added dynamically by the controller -->
+            </StackPane>
+        </VBox>
+    </center>
+</BorderPane>

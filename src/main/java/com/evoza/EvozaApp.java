@@ -2,7 +2,7 @@ package com.evoza;
 
 import com.evoza.ui.CustomTitleBar;
 import com.evoza.ui.LandingPageUI;
-import com.evoza.ui.ProfileHomePage;
+import com.evoza.ui.BrowserInterface;
 import com.evoza.utils.DatabaseHelper;
 import com.evoza.utils.EmailUtil;
 
@@ -59,7 +59,7 @@ public class EvozaApp extends Application {
         launch(args);
     }
     public void openProfileHomePage(Stage primaryStage) {
-        ProfileHomePage profileHomePage = new ProfileHomePage();
+        BrowserInterface profileHomePage = new BrowserInterface();
         profileHomePage.start(primaryStage, 2);
     }
 }
