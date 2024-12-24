@@ -49,6 +49,8 @@ public class BrowserInterface {
         VBox.setVgrow(contentArea, Priority.ALWAYS); // Ensure the content area expands to fill the available space
         mainContainer.getChildren().addAll(customTitleBar, toolbar, contentArea);
         borderPane.setCenter(mainContainer);
+        borderPane.setStyle("-fx-background-color: transparent; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 0;");
+
 
         Scene scene = new Scene(borderPane, 1024, 768);
         // scene.getStylesheets().add(getClass().getResource("/css/newtab.css").toExternalForm());
@@ -360,19 +362,19 @@ public class BrowserInterface {
         addTabButton.setOnMouseExited(e -> addTabButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
 
         // Load button icons
-        Image minimizeIcon = new Image(getClass().getResourceAsStream("/images/icons/minimize.png"), 25, 25, true, true);
-        Image maximizeIcon = new Image(getClass().getResourceAsStream("/images/icons/maximize.png"), 25, 25, true, true);
-        Image restoreIcon = new Image(getClass().getResourceAsStream("/images/icons/reset-down.png"), 25, 25, true, true);
-        Image closeIcon = new Image(getClass().getResourceAsStream("/images/icons/close1.png"), 25, 25, true, true);
+        Image minimizeIcon = new Image(getClass().getResourceAsStream("/images/icons/minimizeb.png"), 25, 25, true, true);
+        Image maximizeIcon = new Image(getClass().getResourceAsStream("/images/icons/maximizeb.png"), 25, 25, true, true);
+        Image restoreIcon = new Image(getClass().getResourceAsStream("/images/icons/squares.png"), 25, 25, true, true);
+        Image closeIcon = new Image(getClass().getResourceAsStream("/images/icons/closeb.png"), 25, 25, true, true);
 
         // Create buttons with icons
         Button minimizeButton = createIconButton(minimizeIcon, "Minimize", 20, 20);
         minimizeButton.setOnAction(e -> stage.setIconified(true));
 
-        Button maximizeButton = createIconButton(maximizeIcon, "Maximize", 14, 14); // Adjusted size
+        Button maximizeButton = createIconButton(maximizeIcon, "Maximize", 12, 12); // Adjusted size
         maximizeButton.setOnAction(e -> stage.setMaximized(!stage.isMaximized()));
 
-        Button closeButton = createIconButton(closeIcon, "Close", 20, 20);
+        Button closeButton = createIconButton(closeIcon, "Close", 12, 12);
         closeButton.setOnAction(e -> stage.close());
 
         // Add listener to change maximize button icon
@@ -381,13 +383,13 @@ public class BrowserInterface {
         stage.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> {
             if (isNowMaximized) {
                 maximizeButton.setGraphic(restoreView);
-                restoreView.setFitHeight(18); // Set height for restore down icon
-                restoreView.setFitWidth(18);  // Set width for restore down icon
+                restoreView.setFitHeight(12); // Set height for restore down icon
+                restoreView.setFitWidth(12);  // Set width for restore down icon
                 maximizeButton.setTooltip(new Tooltip("Restore Down"));
             } else {
                 maximizeButton.setGraphic(maximizeImageView);
-                maximizeImageView.setFitHeight(14); // Set height for maximize icon
-                maximizeImageView.setFitWidth(14);  // Set width for maximize icon
+                maximizeImageView.setFitHeight(12); // Set height for maximize icon
+                maximizeImageView.setFitWidth(12);  // Set width for maximize icon
                 maximizeButton.setTooltip(new Tooltip("Maximize"));
             }
         });
