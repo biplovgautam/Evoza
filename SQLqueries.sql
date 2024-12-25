@@ -43,6 +43,23 @@ CREATE TABLE sessions (
   expires_at TIMESTAMP,
   FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
 );
+CREATE TABLE searchengine (
+  profile_id INTEGER,
+  engine VARCHAR(255),
+  FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
+);
+-- Insert "bing" as the default search engine for all existing profiles
+INSERT INTO searchengine (profile_id, engine)
+SELECT profile_id, 'bing' FROM profiles;
+
+-- Create a trigger to set "bing" as the default search engine for new profiles
+CREATE TRIGGER set_default_search_engine
+AFTER INSERT ON profiles
+FOR EACH ROW
+BEGIN
+  INSERT INTO searchengine (profile_id, engine)
+  VALUES (NEW.profile_id, 'bing');
+END;
 
 INSERT INTO profiles (username, fullname, email, pass, profile_pic)
 VALUES ('Guest', 'Guest Mode', 'example@nothing.com', '123', 3);

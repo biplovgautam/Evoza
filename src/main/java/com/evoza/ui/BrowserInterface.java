@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.scene.web.WebHistory;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
@@ -101,11 +102,11 @@ public class BrowserInterface {
         homeButton.setOnMouseEntered(e -> homeButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         homeButton.setOnMouseExited(e -> homeButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
 
-        Image googleIcon = new Image(getClass().getResourceAsStream("/images/icons/google.png"), 25, 25, true, true);
-        Button googleButton = createIconButton(googleIcon, "Go", 20, 20);
-        googleButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
-        googleButton.setOnMouseEntered(e -> googleButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
-        googleButton.setOnMouseExited(e -> googleButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        Image searchengineIcon = new Image(getClass().getResourceAsStream("/images/icons/Bing.png"), 25, 25, true, true);
+        Button searchengineButton = createIconButton(searchengineIcon, "Go", 20, 20);
+        searchengineButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
+        searchengineButton.setOnMouseEntered(e -> searchengineButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        searchengineButton.setOnMouseExited(e -> searchengineButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         
 
 
@@ -113,7 +114,7 @@ public class BrowserInterface {
         HBox.setHgrow(searchBar, Priority.ALWAYS);
         searchBar.setPromptText("Search Google or type a URL"); // Set placeholder text
         searchBar.setStyle(
-            "-fx-background-color: #d9d9d9; " +
+            "-fx-background-color:rgb(205, 205, 205); " +
             "-fx-text-fill: #000; " +
             "-fx-font-size: 14px; " +
             "-fx-padding: 5px 10px 5px 15px; " +
@@ -174,7 +175,7 @@ public class BrowserInterface {
         });
         goButton.setOnAction(e -> loadURL(searchBar.getText()));
 
-        toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, googleButton,searchBar, goButton,bookmarksButton,verticalLine,downloadsButton,optionsButton);
+        toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, searchengineButton,searchBar, goButton,bookmarksButton,verticalLine,downloadsButton,optionsButton);
 
         return toolbar;
     }
@@ -320,7 +321,7 @@ public class BrowserInterface {
     }
     
 
-    
+    // this is just removing the tab button and the content area from displaying but this is not actually closing the webview for that tab
     private void closeTab(Button tabButton, HBox tabButtonsArea) {
         int index = tabButtons.indexOf(tabButton);
         if (index >= 0) {
@@ -417,7 +418,12 @@ public class BrowserInterface {
     private void loadHomePage() {
         WebView webView = getCurrentWebView();
         if (webView != null) {
-            webView.getEngine().load("https://www.google.com");
+            WebHistory history = webView.getEngine().getHistory();
+            if (!history.getEntries().isEmpty()) {
+                history.go(-history.getCurrentIndex());
+            } else {
+                webView.getEngine().load("https://www.google.com");
+            }
         }
     }
 
