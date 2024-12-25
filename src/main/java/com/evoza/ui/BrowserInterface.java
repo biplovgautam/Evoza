@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-
+import com.evoza.ui.CustomHomepageTemp;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.MalformedURLException;
@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BrowserInterface {
@@ -164,6 +165,13 @@ public class BrowserInterface {
         forwardButton.setOnAction(e -> navigateForward());
         refreshButton.setOnAction(e -> refreshPage());
         homeButton.setOnAction(e -> loadHomePage());
+        searchBar.setOnAction(e -> {
+            String url = searchBar.getText();
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "http://" + url;
+            }
+            loadURL(url);
+        });
         goButton.setOnAction(e -> loadURL(searchBar.getText()));
 
         toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, googleButton,searchBar, goButton,bookmarksButton,verticalLine,downloadsButton,optionsButton);
@@ -221,9 +229,18 @@ public class BrowserInterface {
         // Add cookie handling
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+
+        // List<String> bookmarks = Arrays.asList("https://www.google.com", "https://www.bing.com");
+        // List<String> favoritePages = Arrays.asList("https://www.youtube.com", "https://www.instagram.com");
+        // List<String> recentPages = Arrays.asList("https://www.recent.com", "https://www.anotherrecent.com");
+        // String homePageContent = CustomHomepageTemp.generateHomePageContent(bookmarks, favoritePages, recentPages);
+        
+        // // Load the generated HTML content into the WebView
+        // webEngine.loadContent(homePageContent);
             
         // Load a website
-        webEngine.load("https://google.com");
+        // yahoo, google, bing, 
+        webEngine.load("https://www.bing.com");
     
         // Add a listener to update the tab label and favicon when the page title changes
         webEngine.titleProperty().addListener((obs, oldTitle, newTitle) -> {
@@ -249,6 +266,7 @@ public class BrowserInterface {
         // Add the WebView to the content area and switch to the new tab
         contentArea.getChildren().add(webView);
         switchToTab(tabButton);
+        
     }
     private void addVerticalLine(HBox tabButtonsArea) {
         Rectangle verticalLine = new Rectangle();
@@ -316,6 +334,16 @@ public class BrowserInterface {
                 Rectangle verticalLine = verticalLines.remove(index);
                 tabButtonsArea.getChildren().remove(verticalLine);
             }
+            if (tabCount == 0) {
+                addNewTab(tabButtonsArea);
+            } else {
+                // Switch to the previous tab if available
+                if (index > 0) {
+                    switchToTab(tabButtons.get(index - 1));
+                } else if (!tabButtons.isEmpty()) {
+                    switchToTab(tabButtons.get(0));
+                }
+            }
         }
     }
 
@@ -352,6 +380,7 @@ public class BrowserInterface {
                 System.out.println("Navigating back...");
                 webEngine.getHistory().go(-1);
             } else {
+                // add the template of home page if there is no going back
                 CustomPopupAlert.showNotification("No history to go back.");
                 System.out.println("No history to go back.");
             }
@@ -483,4 +512,6 @@ public class BrowserInterface {
         
         return button;
     }
+
+
 }
