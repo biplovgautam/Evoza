@@ -18,6 +18,8 @@ import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,6 +32,7 @@ public class BrowserInterface {
     private List<Rectangle> verticalLines = new ArrayList<>();
     private StackPane contentArea = new StackPane();
     private TextField searchBar;
+    private int activeTabIndex = -1;
     private int tabCount = 0;
     private static final int MAX_TABS = 6;
 
@@ -68,7 +71,7 @@ public class BrowserInterface {
         toolbar.setStyle("-fx-background-color: #d9d9d9;");
 
         Image profileIcon = new Image(getClass().getResourceAsStream("/images/icons/user.png"), 22, 22, true, true);
-        Button profileButton = createIconButton(profileIcon, "Back", 22, 22);
+        Button profileButton = createIconButton(profileIcon, "Back", 20, 20);
         profileButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         profileButton.setOnMouseEntered(e -> profileButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         profileButton.setOnMouseExited(e -> profileButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
@@ -106,13 +109,13 @@ public class BrowserInterface {
 
 
         searchBar = new TextField();
-        searchBar.setPrefWidth(650); // Increase the width
+        HBox.setHgrow(searchBar, Priority.ALWAYS);
         searchBar.setPromptText("Search Google or type a URL"); // Set placeholder text
         searchBar.setStyle(
             "-fx-background-color: #d9d9d9; " +
             "-fx-text-fill: #000; " +
             "-fx-font-size: 14px; " +
-            "-fx-padding: 5px 0px 5px 15px; " +
+            "-fx-padding: 5px 10px 5px 15px; " +
             "-fx-border-radius: 50px; " +
             "-fx-background-radius: 50px; " +
             "-fx-border-color:rgb(0, 0, 0); " +
@@ -126,6 +129,36 @@ public class BrowserInterface {
         goButton.setOnMouseEntered(e -> goButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         goButton.setOnMouseExited(e -> goButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         
+        Image bookmarksIcon = new Image(getClass().getResourceAsStream("/images/icons/bookmark-white.png"), 25, 25, true, true);
+        Button bookmarksButton = createIconButton(bookmarksIcon, "Go", 20, 20);
+        bookmarksButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
+        bookmarksButton.setOnMouseEntered(e -> bookmarksButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        bookmarksButton.setOnMouseExited(e -> bookmarksButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        
+        Rectangle verticalLine = new Rectangle();
+        verticalLine.setWidth(2); // Set the width of the line
+        verticalLine.setHeight(26); // Set the height of the line to match the tab button height
+        verticalLine.setArcWidth(5); // Set the arc width for rounded corners
+        verticalLine.setArcHeight(8); // Set the arc height for rounded corners
+        verticalLine.setFill(Color.rgb(0, 0, 10, 0.8));
+        HBox.setMargin(verticalLine, new Insets(0, 5, 0, 15)); // Adjust margins as needed (top, right, bottom, left)
+
+
+
+
+        Image downloadsIcon = new Image(getClass().getResourceAsStream("/images/icons/download.png"), 25, 25, true, true);
+        Button downloadsButton = createIconButton(downloadsIcon, "Go", 20, 20);
+        downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
+        downloadsButton.setOnMouseEntered(e -> downloadsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        downloadsButton.setOnMouseExited(e -> downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+
+        Image optionsIcon = new Image(getClass().getResourceAsStream("/images/icons/settings.png"), 25, 25, true, true);
+        Button optionsButton = createIconButton(optionsIcon, "Go", 18, 20);
+        optionsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
+        optionsButton.setOnMouseEntered(e -> optionsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        optionsButton.setOnMouseExited(e -> optionsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        
+
 
         backButton.setOnAction(e -> navigateBack());
         forwardButton.setOnAction(e -> navigateForward());
@@ -133,13 +166,14 @@ public class BrowserInterface {
         homeButton.setOnAction(e -> loadHomePage());
         goButton.setOnAction(e -> loadURL(searchBar.getText()));
 
-        toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, googleButton,searchBar, goButton);
+        toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, googleButton,searchBar, goButton,bookmarksButton,verticalLine,downloadsButton,optionsButton);
 
         return toolbar;
     }
 
     private void addNewTab(HBox tabButtonsArea) {
         if (tabCount >= MAX_TABS) {
+            CustomPopupAlert.showNotification("Maximum number of tabs reached.");
             return;
         }
     
@@ -177,7 +211,19 @@ public class BrowserInterface {
         // Create a new WebView
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
-        webEngine.load("https://www.google.com");
+            
+        // Set user-agent to mimic a modern browser
+        webEngine.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36");
+            
+        // Enable JavaScript
+        webEngine.setJavaScriptEnabled(true);
+            
+        // Add cookie handling
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+            
+        // Load a website
+        webEngine.load("https://google.com");
     
         // Add a listener to update the tab label and favicon when the page title changes
         webEngine.titleProperty().addListener((obs, oldTitle, newTitle) -> {
@@ -185,18 +231,19 @@ public class BrowserInterface {
         });
     
         webEngine.locationProperty().addListener((obs, oldLocation, newLocation) -> {
+            if (tabButton.equals(tabButtons.get(activeTabIndex))) {
+                searchBar.setText(newLocation);
+            }
             updateFavicon(faviconView, newLocation);
         });
     
         // Add event handlers for the tab button
         tabButton.setOnAction(e -> switchToTab(tabButton));
-        tabButton.setOnAction(e -> focusTab(tabButton));
-    
+
         // Add the tab button to the list and the tab buttons area
         tabButtons.add(tabButton);
         tabButtonsArea.getChildren().add(tabButtonsArea.getChildren().size() - 1, tabButton); // Add before the "+" button
-    
-        
+
         addVerticalLine(tabButtonsArea);
 
         // Add the WebView to the content area and switch to the new tab
@@ -244,13 +291,17 @@ public class BrowserInterface {
             // Set the background color of the active tab
             tabButtons.forEach(button -> button.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 5px 10px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-cursor: hand;"));
             tabButton.setStyle("-fx-background-color: #d9d9d9; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 5px 10px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-cursor: hand;");
+    
+            // Set the active tab index
+            activeTabIndex = index;
+    
+            // Focus the tab button
+            tabButton.requestFocus();
+            System.out.println("Tab button at index " + index + " is focused.");
         }
     }
     
-    private void focusTab(Button tabButton) {
-        tabButton.requestFocus();
-        switchToTab(tabButton);
-    }
+
     
     private void closeTab(Button tabButton, HBox tabButtonsArea) {
         int index = tabButtons.indexOf(tabButton);
@@ -269,26 +320,46 @@ public class BrowserInterface {
     }
 
     private WebView getCurrentWebView() {
-        for (int i = 0; i < tabButtons.size(); i++) {
-            if (tabButtons.get(i).isFocused()) {
-                return (WebView) contentArea.getChildren().get(i);
-            }
+        if (activeTabIndex >= 0 && activeTabIndex < contentArea.getChildren().size()) {
+            System.out.println("Returning WebView at activeTabIndex: " + activeTabIndex); // Debugging: Print the activeTabIndex
+            return (WebView) contentArea.getChildren().get(activeTabIndex);
         }
+        System.out.println("No active tab found."); // Debugging: Print if no active tab is found
         return null;
     }
 
     private void navigateBack() {
         WebView webView = getCurrentWebView();
+        
+        // Debugging: Log the WebView state.
         if (webView != null) {
             WebEngine webEngine = webView.getEngine();
-            if (webEngine.getHistory().getCurrentIndex() > 0) {
-                System.out.println("Navigating back");
+            
+            // Debugging: Check if the WebEngine is properly initialized.
+            if (webEngine == null) {
+                System.out.println("WebEngine is null");
+                return;
+            }
+    
+            // Debugging: Log the history state.
+            int currentIndex = webEngine.getHistory().getCurrentIndex();
+            int historySize = webEngine.getHistory().getEntries().size();
+            System.out.println("Current history index: " + currentIndex);
+            System.out.println("History size: " + historySize);
+            
+            // If history exists and can go back, do it.
+            if (currentIndex > 0) {
+                System.out.println("Navigating back...");
                 webEngine.getHistory().go(-1);
             } else {
-                System.out.println("No history to go back");
+                CustomPopupAlert.showNotification("No history to go back.");
+                System.out.println("No history to go back.");
             }
+        } else {
+            System.out.println("WebView is null");
         }
     }
+    
     
 
     private void navigateForward() {
@@ -300,6 +371,7 @@ public class BrowserInterface {
                 System.out.println("Navigating forward");
                 webEngine.getHistory().go(1); // Move forward in history by 1 entry
             } else {
+                CustomPopupAlert.showNotification("No history to go forward.");
                 System.out.println("No history to go forward");
             }
         }

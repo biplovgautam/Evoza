@@ -48,7 +48,7 @@ public class CustomPopupAlert {
         notificationStage.setScene(scene);
 
         // Close the notification after 3 seconds
-        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(event -> notificationStage.close());
         delay.play();
 
