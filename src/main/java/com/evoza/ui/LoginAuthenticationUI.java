@@ -1,6 +1,8 @@
 package com.evoza.ui;
 
-import com.evoza.browser.BrowserUtils;
+import com.evoza.utils.BrowserUtils;
+import com.evoza.utils.EmailUtil;
+import com.evoza.utils.ProfileManager;
 import com.evoza.utils.AuthenticationManager;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -48,7 +50,7 @@ public class LoginAuthenticationUI {
         titleText.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-fill: #ffffff;");
         titlebox.getChildren().addAll(titleText);
 
-        Text usernameLabel = new Text("Username:");
+        Text usernameLabel = new Text("Username");
         usernameLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
         VBox.setMargin(usernameLabel, new Insets(25, 0, 0, 0));
 
@@ -57,9 +59,9 @@ public class LoginAuthenticationUI {
         usernameField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
         usernameField.setPrefWidth(80);
         usernameField.setPrefHeight(45);
-        VBox.setMargin(usernameField, new Insets(5, 0, 0, 0));
+        VBox.setMargin(usernameField, new Insets(0, 0, 0, 0));
 
-        Text emailLabel = new Text("Email:");
+        Text emailLabel = new Text("Email");
         emailLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
         VBox.setMargin(emailLabel, new Insets(10, 0, 0, 0));
 
@@ -68,9 +70,9 @@ public class LoginAuthenticationUI {
         emailField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
         emailField.setPrefWidth(80);
         emailField.setPrefHeight(45);
-        VBox.setMargin(emailField, new Insets(5, 0, 0, 0));
+        VBox.setMargin(emailField, new Insets(0, 0, 0, 0));
 
-        Text passwordLabel = new Text("Password:");
+        Text passwordLabel = new Text("Password*");
         passwordLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
         VBox.setMargin(passwordLabel, new Insets(10, 0, 0, 0));
 
@@ -79,23 +81,41 @@ public class LoginAuthenticationUI {
         passwordField.setStyle("-fx-background-radius: 50; -fx-background-color: #9aafc0; -fx-text-fill: #000000;");
         passwordField.setPrefWidth(80);
         passwordField.setPrefHeight(45);
-        passwordField.setOnMouseEntered(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 40;"));
-        passwordField.setOnMouseExited(e -> passwordField.setStyle("-fx-background-color: #9aafc0; -fx-text-fill: #000000; -fx-background-radius: 50;"));
-        VBox.setMargin(passwordField, new Insets(5, 0, 0, 0));
+        VBox.setMargin(passwordField, new Insets(0, 0, 0, 0));
 
-        VBox submitbox = new VBox(10);
-        submitbox.setAlignment(javafx.geometry.Pos.CENTER);
+        HBox submitbox = new HBox(10);
+        submitbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        VBox.setMargin(submitbox, new Insets(-10, 0, 0, 0));
+
+
+        Text forgotpassText = new Text("forget password?");
+        forgotpassText.setStyle("-fx-font-size: 14; -fx-fill: #9aafc0; -fx-cursor: hand;");
+        forgotpassText.setOnMouseEntered(e -> forgotpassText.setStyle("-fx-font-size: 14; -fx-fill:  #dadada; -fx-cursor: hand; -fx-underline: true;"));
+        forgotpassText.setOnMouseExited(e -> forgotpassText.setStyle("-fx-font-size: 14; -fx-fill:  #9aafc0; -fx-cursor: hand;"));
+        HBox.setMargin(forgotpassText, new Insets(-5, 10, 0, 20));
+
+        forgotpassText.setOnMouseClicked(e -> {
+            
+            // Open the UserVerificationUI for OTP verification
+            UserVerificationUI.openVerificationPopup(primaryStage, username, email, profileId);
+            // Close the login stage
+            // authStage.close();
+            // we are not closing the stage we are directly opening the verification stage
+
+
+        });
+
         Button submitButton = new Button("Login");
         submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;");
         submitButton.setPrefWidth(120);
         submitButton.setPrefHeight(40);
-        VBox.setMargin(submitButton, new Insets(30, 0, 0, 0));
+        HBox.setMargin(submitButton, new Insets(30, 0, 0, 80));
 
         submitButton.setOnAction(e -> {
             boolean isAuthenticated = AuthenticationManager.authenticate(username, passwordField.getText());
             if (isAuthenticated) {
-                BrowserUtils.openProfileHomePage(primaryStage, profileId);
                 authStage.close();
+                BrowserUtils.openProfileHomePage(primaryStage, profileId);
             } else {
                 CustomPopupAlert.showNotification("Invalid password. Please try again.");
                 System.err.println("Authentication failed.");
@@ -103,7 +123,7 @@ public class LoginAuthenticationUI {
         });
         submitButton.setOnMouseEntered(e -> submitButton.setStyle("-fx-background-color: #dadada; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 50;"));
         submitButton.setOnMouseExited(e -> submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;"));
-        submitbox.getChildren().addAll(submitButton);
+        submitbox.getChildren().addAll(forgotpassText,submitButton);
 
         vbox.getChildren().addAll(titleBar, titlebox, usernameLabel, usernameField, emailLabel, emailField, passwordLabel, passwordField, submitbox);
 

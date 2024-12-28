@@ -1,6 +1,6 @@
 package com.evoza.utils;
 
-public class Profile {
+public class Profiles {
     private int profileId;
     private String username;
     private String fullname;
@@ -8,7 +8,7 @@ public class Profile {
     private String password;
     private int profilePicId;
 
-    public Profile(int profileId, String username, String fullname, String email, String password, int profilePicId) {
+    public Profiles(int profileId, String username, String fullname, String email, String password, int profilePicId) {
         this.profileId = profileId;
         this.username = username;
         this.fullname = fullname;

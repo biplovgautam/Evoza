@@ -11,3 +11,5 @@ bin/
 build/
 
 .env
+
+idea.txt

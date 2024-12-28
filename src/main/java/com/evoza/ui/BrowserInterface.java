@@ -37,6 +37,7 @@ public class BrowserInterface {
     private int activeTabIndex = -1;
     private int tabCount = 0;
     private static final int MAX_TABS = 6;
+    
 
     public void start(Stage profileStage, int profileId) {
         profileStage.setTitle("Evoza Web Browser");
@@ -44,6 +45,7 @@ public class BrowserInterface {
         BorderPane borderPane = new BorderPane();
 
         // Add custom title bar with tabs
+        profileStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
         HBox customTitleBar = CustomTitleBarWithTabs(profileStage);
 
         // Create the toolbar
@@ -58,13 +60,22 @@ public class BrowserInterface {
 
 
         Scene scene = new Scene(borderPane, 1024, 768);
+        profileStage.setMaximized(true); // Open in maximized mode
         // scene.getStylesheets().add(getClass().getResource("/css/newtab.css").toExternalForm());
         profileStage.setScene(scene);
-        profileStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
         profileStage.show();
 
         // Automatically open one tab when the profile home page is opened
-        addNewTab((HBox) customTitleBar.lookup("#tabButtonsArea"));
+        // addNewTab((HBox) customTitleBar.lookup("#tabButtonsArea"));
+
+        // Automatically open one tab when the profile home page is opened
+        HBox tabButtonsArea = (HBox) customTitleBar.lookup("#tabButtonsArea");
+        if (tabButtonsArea != null) {
+            System.out.println("one tab opned automatically");
+            addNewTab(tabButtonsArea);
+        } else {
+            System.err.println("Error: #tabButtonsArea not found in customTitleBar");
+        }
     }
 
     private HBox createToolbar() {
@@ -230,6 +241,7 @@ public class BrowserInterface {
         // Add cookie handling
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
+        
 
         // List<String> bookmarks = Arrays.asList("https://www.google.com", "https://www.bing.com");
         // List<String> favoritePages = Arrays.asList("https://www.youtube.com", "https://www.instagram.com");
@@ -292,7 +304,8 @@ public class BrowserInterface {
             faviconView.setImage(favicon);
         } catch (Exception e) {
             e.printStackTrace();
-            faviconView.setImage(null); // Fallback to a default image
+            Image webIcon = new Image(getClass().getResourceAsStream("/images/icons/web.png"), 25, 25, true, true);
+            faviconView.setImage(webIcon); // Fallback to a default image
         }
     }
     

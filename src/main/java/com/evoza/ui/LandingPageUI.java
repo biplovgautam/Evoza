@@ -2,8 +2,10 @@ package com.evoza.ui;
 
 import com.evoza.utils.AuthenticationManager;
 import com.evoza.utils.AvatarFetcher;
-import com.evoza.utils.Profile;
+import com.evoza.utils.Profiles;
+import com.evoza.utils.ProfileManager;
 import com.evoza.utils.ProfileFetcher;
+import com.evoza.ui.UserVerificationUI;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,13 +35,24 @@ import java.util.List;
 
 public class LandingPageUI {
     private static BorderPane root;
+    
+
+    private static GridPane profilesContainer;
+    private static VBox rightContainer;
+    private static Stage primaryStage; // Define primaryStage as a class variable
+
+    public static BorderPane start(Stage stage) {
+        primaryStage = stage; // Initialize the class variable
+        root = createRoot(primaryStage);
+        return root;
+    }
 
     public static BorderPane createRoot(Stage primaryStage) {
         root = new BorderPane();
 
         HBox mainContainer = new HBox();
         VBox leftContainer = new VBox();
-        VBox rightContainer = new VBox(10);
+        rightContainer = new VBox(10);
 
         // Set fixed width for the left container
         leftContainer.setPrefWidth(250);
@@ -81,7 +94,7 @@ public class LandingPageUI {
         // Create containers for logo, title, description, and profiles
         VBox logoTitleDescriptionContainer = new VBox(10);
         logoTitleDescriptionContainer.setAlignment(javafx.geometry.Pos.CENTER); // Center the contents
-        GridPane profilesContainer = new GridPane();
+        profilesContainer = new GridPane();
         profilesContainer.setHgap(10);
         profilesContainer.setVgap(10);
         profilesContainer.setAlignment(javafx.geometry.Pos.CENTER);
@@ -119,11 +132,52 @@ public class LandingPageUI {
 
       
 
+        // // Fetch profiles from the database and add them to the profilesContainer
+        // List<Profiles> profiles = ProfileFetcher.fetchAllProfiles();
+        // int column = 0;
+        // int row = 0;
+        // for (Profiles profile : profiles) {
+        //     Image avatarImage = AvatarFetcher.fetchAvatarById(profile.getProfilePicId());
+        //     HBox profileBox = createClickableBox(profile.getUsername(), avatarImage);
+        //     profileBox.setOnMouseClicked(e -> openAuthenticationPopup(primaryStage, profile.getUsername(), profile.getEmail(), profile.getProfileId()));
+        //     profilesContainer.add(profileBox, column, row);
+        //     column++;
+        //     if (column == 5) { // Change this value to set the number of columns
+        //         column = 0;
+        //         row++;
+        //     }
+        // }
+
+        // // Add a clickable box for adding a new profile
+        // Image adduser = new Image(LandingPageUI.class.getResourceAsStream("/images/icons/add-user.png"));
+        
+        // HBox addProfileBox = createClickableBox("Add Profile", adduser);
+        // addProfileBox.setOnMouseClicked(e -> openSignupPopup(primaryStage));
+        // profilesContainer.add(addProfileBox, column, row);
+
+        // Add containers to the rightContainer
+        rightContainer.getChildren().addAll(logoTitleDescriptionContainer);
+        loadProfiles();
+
+        HBox.setHgrow(leftContainer, Priority.NEVER);
+        HBox.setHgrow(rightContainer, Priority.ALWAYS);
+
+        mainContainer.getChildren().addAll(leftContainer, rightContainer);
+        root.setCenter(mainContainer);
+
+
+        return root;
+    }
+
+    public static void loadProfiles(){
+        // Clear existing profiles
+        profilesContainer.getChildren().clear();
+
         // Fetch profiles from the database and add them to the profilesContainer
-        List<Profile> profiles = ProfileFetcher.fetchAllProfiles();
+        List<Profiles> profiles = ProfileFetcher.fetchAllProfiles();
         int column = 0;
         int row = 0;
-        for (Profile profile : profiles) {
+        for (Profiles profile : profiles) {
             Image avatarImage = AvatarFetcher.fetchAvatarById(profile.getProfilePicId());
             HBox profileBox = createClickableBox(profile.getUsername(), avatarImage);
             profileBox.setOnMouseClicked(e -> openAuthenticationPopup(primaryStage,profile.getUsername(), profile.getEmail(), profile.getProfileId()));
@@ -137,40 +191,19 @@ public class LandingPageUI {
 
         // Add a clickable box for adding a new profile
         Image adduser = new Image(LandingPageUI.class.getResourceAsStream("/images/icons/add-user.png"));
-        
         HBox addProfileBox = createClickableBox("Add Profile", adduser);
         addProfileBox.setOnMouseClicked(e -> openSignupPopup(primaryStage));
         profilesContainer.add(addProfileBox, column, row);
 
-        // Add containers to the rightContainer
-        rightContainer.getChildren().addAll(logoTitleDescriptionContainer, profilesContainer);
+        // Ensure profilesContainer is only added once
+        if (!rightContainer.getChildren().contains(profilesContainer)) {
+            rightContainer.getChildren().add(profilesContainer);
+        }
 
-        HBox.setHgrow(leftContainer, Priority.NEVER);
-        HBox.setHgrow(rightContainer, Priority.ALWAYS);
-
-        mainContainer.getChildren().addAll(leftContainer, rightContainer);
-        root.setCenter(mainContainer);
-
-
-        return root;
-    }
-    // public static void BorderPane(Stage primaryStage) {
-    //     root = createRoot(primaryStage);
-    //     primaryStage.setScene(new Scene(root, 800, 600));
-    //     primaryStage.show();
-    // }
-    public static BorderPane start(Stage primaryStage) {
-        root = createRoot(primaryStage);
-        return root;
     }
 
-    public static void refresh(Stage primaryStage) {
-        // Clear existing content
-        root.getChildren().clear();
-        // Reinitialize the UI components
-        BorderPane newRoot = createRoot(primaryStage);
-        root.setCenter(newRoot.getCenter());
-    }
+
+
 
     public static HBox createClickableBox(String text, Image avatarImage) {
         HBox box = new HBox();
@@ -187,6 +220,11 @@ public class LandingPageUI {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem editItem = new MenuItem("Edit");
             MenuItem removeItem = new MenuItem("Remove");
+            removeItem.setOnAction(e -> {
+                ProfileManager.deleteProfile(text);
+                // logic to update the UI after deletion
+                loadProfiles();
+            });
             contextMenu.getItems().addAll(editItem, removeItem);
             editButton.setOnMouseClicked(e -> {contextMenu.show(editButton, e.getScreenX(), e.getScreenY());});
             HBox topRightBox = new HBox(editButton);
@@ -230,6 +268,12 @@ public class LandingPageUI {
         SignupAuthenticationUI.openSignupPopup(primaryStage);
     }
     public static void openAuthenticationPopup(Stage primaryStage, String username, String email, int profileId) {
+        if (!ProfileManager.isUserActive(username)) {
+            UserVerificationUI.openVerificationPopup(primaryStage, username, email,profileId);
+            return;
+        }
+        else{
         LoginAuthenticationUI.openAuthenticationPopup(primaryStage, username, email, profileId);
+        }
     }
 }

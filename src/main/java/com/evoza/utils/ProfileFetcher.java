@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFetcher {
-    public static List<Profile> fetchAllProfiles() {
-        List<Profile> profiles = new ArrayList<>();
+    public static List<Profiles> fetchAllProfiles() {
+        List<Profiles> profiles = new ArrayList<>();
         String query = "SELECT * FROM profiles";
         try (Connection connection = DatabaseHelper.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -22,7 +22,7 @@ public class ProfileFetcher {
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("pass");
                 int profilePicId = resultSet.getInt("profile_pic");
-                Profile profile = new Profile(profileId, username, fullname, email, password, profilePicId);
+                Profiles profile = new Profiles(profileId, username, fullname, email, password, profilePicId);
                 profiles.add(profile);
             }
         } catch (SQLException e) {

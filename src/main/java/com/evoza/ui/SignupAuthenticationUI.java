@@ -1,15 +1,15 @@
 package com.evoza.ui;
 
 import java.util.Random;
-
-import com.evoza.browser.BrowserUtils;
 import com.evoza.utils.EmailUtil;
 import com.evoza.utils.ProfileManager;
+import com.evoza.ui.LandingPageUI;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -88,6 +88,12 @@ public class SignupAuthenticationUI {
         lnameField.setPrefHeight(45);
         VBox.setMargin(lnameField, new Insets(2, 0, 0, 0));
         lname.getChildren().addAll(l_nameLabel,lnameField);
+        // Add event handler to shift focus to lnameField when Enter is pressed in fnameField
+        fnameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                lnameField.requestFocus();
+            }
+        });
 
 
         namebox.getChildren().addAll(fname,lname);
@@ -101,6 +107,12 @@ public class SignupAuthenticationUI {
         usernameField.setPrefWidth(80);
         usernameField.setPrefHeight(45);
         VBox.setMargin(usernameField, new Insets(-8, 0, 0, 0));
+        // Add event handler to shift focus to username when Enter is pressed in lnameField
+        lnameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                usernameField.requestFocus();
+            }
+        });
 
         Text emailLabel = new Text("Email*");
         emailLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
@@ -112,6 +124,12 @@ public class SignupAuthenticationUI {
         emailField.setPrefWidth(80);
         emailField.setPrefHeight(45);
         VBox.setMargin(emailField, new Insets(-8, 0, 0, 0));
+        // Add event handler to shift focus to email when Enter is pressed in username
+        usernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                emailField.requestFocus();
+            }
+        });        
 
         Text passwordLabel = new Text("Password*");
         passwordLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
@@ -123,6 +141,12 @@ public class SignupAuthenticationUI {
         passwordField.setPrefWidth(80);
         passwordField.setPrefHeight(45);
         VBox.setMargin(passwordField, new Insets(-8, 0, 0, 0));
+        // Add event handler to shift focus to password when Enter is pressed in email
+        emailField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                passwordField.requestFocus();
+            }
+        });
 
         Text confirmpasswordLabel = new Text("Confirm Password*");
         confirmpasswordLabel.setStyle("-fx-font-size: 14; -fx-fill: #ffffff; -fx-font-weight: bold;");
@@ -134,6 +158,12 @@ public class SignupAuthenticationUI {
         confirmpasswordField.setPrefWidth(80);
         confirmpasswordField.setPrefHeight(45);
         VBox.setMargin(confirmpasswordField, new Insets(-8, 0, 0, 0));
+        // Add event handler to shift focus to confirmpassword when Enter is pressed in password
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                confirmpasswordField.requestFocus();
+            }
+        });
 
         VBox submitbox = new VBox(10);
         submitbox.setAlignment(javafx.geometry.Pos.CENTER);
@@ -142,6 +172,14 @@ public class SignupAuthenticationUI {
         submitButton.setPrefWidth(120);
         submitButton.setPrefHeight(40);
         VBox.setMargin(submitButton, new Insets(30, 0, 0, 0));
+
+        // Add event handler to trigger submitButton action when Enter is pressed in confirmpassword
+        confirmpasswordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                submitButton.fire();
+            }
+        });
+
 
         submitButton.setOnAction(e -> {
             String username = usernameField.getText().toLowerCase();
@@ -159,12 +197,14 @@ public class SignupAuthenticationUI {
                 return;
             }
             else{
-                boolean success = ProfileManager.createProfile(username, fullname, email, password, profilePicId, isActive);
-                if (success) {
-                    CustomPopupAlert.showNotification("User signed up successfully.");
+                boolean signupsuccess = ProfileManager.createProfile(username, fullname, email, password, profilePicId, isActive);
+                if (signupsuccess) {
                     System.out.println("User signed up successfully.");
-                    LandingPageUI.refresh(primaryStage);
-                     // Send a welcome email
+                    // retrive profile id by username
+                    int id = ProfileManager.getProfileIdByUsername(username);
+                    // generate and store otp in database and send otp in email
+                    String otp_number = ProfileManager.generateAndStoreOTP(id);
+                    // Send a welcome email
                     String subject = "Welcome to Evoza!";
                     String content =  "<!DOCTYPE html>" +
                     "<html>" +
@@ -187,7 +227,7 @@ public class SignupAuthenticationUI {
                     "<div class='content'>" +
                     "<h1>Signed up!</h1>" +
                     "<p>Username: " + username + "</p>" +
-                    "<p>password: " + password + "</p>" +
+                    "<p>OTP: " + otp_number + "</p>" +
                     "<p>Thank you for signing up!</p>" +
                     "<p>Best regards,<br>Evoza Team</p>" +
                     "</div>" +
@@ -197,8 +237,10 @@ public class SignupAuthenticationUI {
                     "</div>" +
                     "</body>" +
                     "</html>";
+                    LandingPageUI.loadProfiles();
                     EmailUtil.sendEmail(email, subject, content);
                     authStage.close();
+                    // UserVerificationUI.openVerificationPopup(primaryStage, username, email,id);
                 } else {
                     System.err.println("User signup failed.");
                 }
