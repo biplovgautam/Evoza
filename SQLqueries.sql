@@ -21,18 +21,18 @@ CREATE TABLE profiles (
 );
 
 CREATE TABLE bookmarks (
+  bookmark_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   profile_id INTEGER,
   title VARCHAR(255),
   weburl VARCHAR(2083),
-  FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
 );
 
 CREATE TABLE histories (
+  history_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   profile_id INTEGER,
   weburl VARCHAR(2083),
   title VARCHAR(255),
   visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
 );
 
 CREATE TABLE sessions (
@@ -41,7 +41,6 @@ CREATE TABLE sessions (
   token VARCHAR(2083),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   expires_at TIMESTAMP,
-  FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
 );
 
 CREATE TABLE OTPs (

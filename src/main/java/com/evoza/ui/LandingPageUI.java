@@ -132,29 +132,6 @@ public class LandingPageUI {
 
       
 
-        // // Fetch profiles from the database and add them to the profilesContainer
-        // List<Profiles> profiles = ProfileFetcher.fetchAllProfiles();
-        // int column = 0;
-        // int row = 0;
-        // for (Profiles profile : profiles) {
-        //     Image avatarImage = AvatarFetcher.fetchAvatarById(profile.getProfilePicId());
-        //     HBox profileBox = createClickableBox(profile.getUsername(), avatarImage);
-        //     profileBox.setOnMouseClicked(e -> openAuthenticationPopup(primaryStage, profile.getUsername(), profile.getEmail(), profile.getProfileId()));
-        //     profilesContainer.add(profileBox, column, row);
-        //     column++;
-        //     if (column == 5) { // Change this value to set the number of columns
-        //         column = 0;
-        //         row++;
-        //     }
-        // }
-
-        // // Add a clickable box for adding a new profile
-        // Image adduser = new Image(LandingPageUI.class.getResourceAsStream("/images/icons/add-user.png"));
-        
-        // HBox addProfileBox = createClickableBox("Add Profile", adduser);
-        // addProfileBox.setOnMouseClicked(e -> openSignupPopup(primaryStage));
-        // profilesContainer.add(addProfileBox, column, row);
-
         // Add containers to the rightContainer
         rightContainer.getChildren().addAll(logoTitleDescriptionContainer);
         loadProfiles();
