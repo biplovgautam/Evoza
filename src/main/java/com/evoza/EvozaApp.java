@@ -5,6 +5,7 @@ import com.evoza.ui.LandingPageUI;
 import com.evoza.ui.BrowserInterface;
 import com.evoza.utils.DatabaseHelper;
 import com.evoza.utils.EmailUtil;
+import com.evoza.utils.BrowserUtils;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

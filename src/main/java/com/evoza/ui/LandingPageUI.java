@@ -62,7 +62,7 @@ public class LandingPageUI {
         rightContainer.setPrefWidth(750);
 
         leftContainer.setStyle("-fx-background-color: #395f84;");
-        rightContainer.setStyle("-fx-background-color: #9aafc0;");
+        rightContainer.setStyle("-fx-background-color:rgb(172, 197, 218);");
 
         // Create a clickable box for guest mode
         HBox guestModeBox = new HBox(10);

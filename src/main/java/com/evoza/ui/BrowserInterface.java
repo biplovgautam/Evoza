@@ -19,8 +19,11 @@ import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import com.evoza.ui.CustomHomepageTemp;
+import com.evoza.utils.CookieManagerUtil;
+
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,9 +40,22 @@ public class BrowserInterface {
     private int activeTabIndex = -1;
     private int tabCount = 0;
     private static final int MAX_TABS = 6;
+    private int profileId;
+
     
 
     public void start(Stage profileStage, int profileId) {
+        this.profileId = profileId;
+         // Initialize CookieManager
+        CookieManager cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieManager);
+
+        // Load cookies for the profile
+        CookieManagerUtil.loadCookies(this.profileId);
+
+
+
         profileStage.setTitle("Evoza Web Browser");
 
         BorderPane borderPane = new BorderPane();
@@ -65,8 +81,6 @@ public class BrowserInterface {
         profileStage.setScene(scene);
         profileStage.show();
 
-        // Automatically open one tab when the profile home page is opened
-        // addNewTab((HBox) customTitleBar.lookup("#tabButtonsArea"));
 
         // Automatically open one tab when the profile home page is opened
         HBox tabButtonsArea = (HBox) customTitleBar.lookup("#tabButtonsArea");
@@ -76,6 +90,11 @@ public class BrowserInterface {
         } else {
             System.err.println("Error: #tabButtonsArea not found in customTitleBar");
         }
+        // Save cookies when the stage is closed
+        profileStage.setOnCloseRequest(event -> {
+            System.out.println("Saving cookies...");
+            CookieManagerUtil.saveCookies(profileId);
+        });
     }
 
     private HBox createToolbar() {
@@ -239,8 +258,8 @@ public class BrowserInterface {
         webEngine.setJavaScriptEnabled(true);
             
         // Add cookie handling
-        CookieManager cookieManager = new CookieManager();
-        CookieHandler.setDefault(cookieManager);
+        // CookieManager cookieManager = new CookieManager();
+        // CookieHandler.setDefault(cookieManager);
         
 
         // List<String> bookmarks = Arrays.asList("https://www.google.com", "https://www.bing.com");
@@ -295,6 +314,7 @@ public class BrowserInterface {
         tabButtonsArea.getChildren().add(tabButtonsArea.getChildren().size() - 1, verticalLine);
 
     }
+    
     
     private void updateFavicon(ImageView faviconView, String url) {
         try {
