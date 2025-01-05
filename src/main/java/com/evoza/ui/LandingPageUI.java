@@ -5,6 +5,7 @@ import com.evoza.utils.AvatarFetcher;
 import com.evoza.utils.Profiles;
 import com.evoza.utils.ProfileManager;
 import com.evoza.utils.ProfileFetcher;
+import com.evoza.utils.BrowserUtils;
 import com.evoza.ui.UserVerificationUI;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -28,7 +29,6 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import com.evoza.browser.BrowserUtils;
 
 
 import java.util.List;

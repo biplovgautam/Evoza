@@ -2,7 +2,6 @@ package com.evoza;
 
 import com.evoza.ui.CustomTitleBar;
 import com.evoza.ui.LandingPageUI;
-import com.evoza.browser.BrowserUtils;
 import com.evoza.ui.BrowserInterface;
 import com.evoza.utils.DatabaseHelper;
 import com.evoza.utils.EmailUtil;
