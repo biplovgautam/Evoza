@@ -66,7 +66,7 @@ public class CustomTitleBar extends HBox {
 
         this.getChildren().addAll(leftBox, rightBox);
         this.setAlignment(Pos.CENTER_LEFT);
-        this.setStyle("-fx-background-color: #131a24; -fx-padding: 5px;");
+        this.setStyle("-fx-background-color: #9aafc0; -fx-padding: 2px;");
 
         // Enable dragging of the window
         this.setOnMousePressed((MouseEvent event) -> {
