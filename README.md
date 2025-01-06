@@ -31,10 +31,6 @@ Evoza/
 │   │   ├── java/
 │   │   │   ├── com/
 │   │   │   │   ├── evoza/
-│   │   │   │   │   ├── browser/
-│   │   │   │   │   │   ├── BrowserController.java
-│   │   │   │   │   │   ├── GuestMode.java
-│   │   │   │   │   │   ├── ProfileMode.java
 │   │   │   │   │   ├── profile/
 │   │   │   │   │   │   ├── ProfileManager.java
 │   │   │   │   │   │   ├── Profile.java
@@ -44,16 +40,13 @@ Evoza/
 │   │   │   │   │   │   ├── BrowserUI.java
 │   │   │   │   │   ├── utils/
 │   │   │   │   │   │   ├── DatabaseHelper.java
+│   │   │   │   │   ├── EvozaApp.java
 │   │   ├── resources/
-│   │   │   ├── fxml/
 │   │   │   ├── images/
 │   │   │   │   ├── avatars/
 │   │   │   │   └── icons/
-│   │   │   ├── css/
-│   │   │   │   ├── app.css
-│   │   │   │   ├── newtab.css
-│   │   │   ├── templates/
-│   │   │   │   ├── newtabtemplate.html
+│   │   │   ├── documentation/
+│   │   │   │   ├── Evoza.docx 
 ├── test/
 │   ├── java/
 │   │   ├── com/

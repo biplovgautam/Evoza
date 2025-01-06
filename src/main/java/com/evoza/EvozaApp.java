@@ -35,7 +35,6 @@ public class EvozaApp extends Application {
             borderPane.setCenter(root);
 
             Scene scene = new Scene(borderPane, 1024, 768);
-            scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());
 
             primaryStage.setTitle("Evoza Web Browser");
             primaryStage.setScene(scene);
