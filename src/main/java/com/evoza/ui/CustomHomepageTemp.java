@@ -105,3 +105,5 @@ public class CustomHomepageTemp {
         return htmlContent.toString();
     }
 }
+
+// Home Page Elements added
