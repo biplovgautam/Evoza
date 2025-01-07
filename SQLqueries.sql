@@ -9,6 +9,7 @@ CREATE TABLE avatars (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+--create profiles table
 CREATE TABLE profiles (
   profile_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(255),
@@ -20,6 +21,7 @@ CREATE TABLE profiles (
   FOREIGN KEY (profile_pic) REFERENCES avatars(avatar_id)
 );
 
+-- create bookmarks table
 CREATE TABLE bookmarks (
   bookmark_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   profile_id INTEGER,
