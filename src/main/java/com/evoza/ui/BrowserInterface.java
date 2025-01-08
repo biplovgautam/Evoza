@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+
+import com.evoza.EvozaApp;
 import com.evoza.ui.CustomHomepageTemp;
 import com.evoza.utils.SessionUtils;
 
@@ -112,7 +114,7 @@ public class BrowserInterface {
             // Clear session and redirect to login page
             SessionUtils.clearSession(profileId);
             BrowserStage.close();
-            // LandingPageUI.start(BrowserStage);
+            EvozaApp.openLandingPage();
         });
 
         profileMenu.getItems().addAll(profileMenuItem, logoutMenuItem);

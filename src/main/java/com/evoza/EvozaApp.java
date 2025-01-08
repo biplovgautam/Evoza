@@ -2,32 +2,30 @@ package com.evoza;
 
 import com.evoza.ui.CustomTitleBar;
 import com.evoza.ui.LandingPageUI;
-import com.evoza.ui.BrowserInterface;
 import com.evoza.utils.DatabaseHelper;
-import com.evoza.utils.EmailUtil;
-import com.evoza.utils.BrowserUtils;
 
+import java.io.InputStream;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.InputStream;
-
 public class EvozaApp extends Application {
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            primaryStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
+    private static Stage primaryStage;
 
+    @Override
+    public void start(Stage stage) {
+        primaryStage = stage;
+        primaryStage.initStyle(StageStyle.UNDECORATED); // Remove default title bar
+        openLandingPage();
+    }
+
+    public static void openLandingPage() {
+        try {
             // Initialize avatars
             DatabaseHelper.initializeAvatars();
-            
-            // BrowserUtils.openProfileHomePage(primaryStage,1);
-
 
             BorderPane root = LandingPageUI.start(primaryStage);
             BorderPane borderPane = new BorderPane();
@@ -42,7 +40,7 @@ public class EvozaApp extends Application {
             primaryStage.setMaximized(true); // Open in maximized mode
 
             // Set the application icon
-            InputStream iconStream = getClass().getResourceAsStream("/images/icons/logo.png");
+            InputStream iconStream = EvozaApp.class.getResourceAsStream("/images/icons/logo.png");
             if (iconStream == null) {
                 System.err.println("Icon resource not found!");
             } else {
@@ -58,5 +56,4 @@ public class EvozaApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
