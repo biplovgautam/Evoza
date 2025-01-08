@@ -19,7 +19,6 @@ import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import com.evoza.ui.CustomHomepageTemp;
-import com.evoza.utils.CookieManagerUtil;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -46,13 +45,6 @@ public class BrowserInterface {
 
     public void start(Stage profileStage, int profileId) {
         this.profileId = profileId;
-         // Initialize CookieManager
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cookieManager);
-
-        // Load cookies for the profile
-        CookieManagerUtil.loadCookies(this.profileId);
 
 
 
@@ -90,11 +82,7 @@ public class BrowserInterface {
         } else {
             System.err.println("Error: #tabButtonsArea not found in customTitleBar");
         }
-        // Save cookies when the stage is closed
-        profileStage.setOnCloseRequest(event -> {
-            System.out.println("Saving cookies...");
-            CookieManagerUtil.saveCookies(profileId);
-        });
+        
     }
 
     private HBox createToolbar() {
@@ -257,9 +245,6 @@ public class BrowserInterface {
         // Enable JavaScript
         webEngine.setJavaScriptEnabled(true);
             
-        // Add cookie handling
-        // CookieManager cookieManager = new CookieManager();
-        // CookieHandler.setDefault(cookieManager);
         
 
         // List<String> bookmarks = Arrays.asList("https://www.google.com", "https://www.bing.com");

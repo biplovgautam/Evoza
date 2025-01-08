@@ -44,16 +44,7 @@ CREATE TABLE sessions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   expires_at TIMESTAMP,
 );
-CREATE TABLE cookies (
-  cookie_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  profile_id INTEGER,
-  domain VARCHAR(255),
-  name VARCHAR(255),
-  value VARCHAR(255),
-  path VARCHAR(255),
-  expiry TIMESTAMP,
-  FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
-);
+
 
 CREATE TABLE OTPs (
   profile_id INTEGER,
