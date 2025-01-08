@@ -40,4 +40,20 @@ public class SessionUtils {
             e.printStackTrace();
         }
     }
+    public static void updateSession(int profileId) {
+        try (Connection conn = DatabaseHelper.getConnection()) {
+            String query = "UPDATE sessions SET expires_at = ? WHERE profile_id = ? AND expires_at > ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now().plusHours(12)));
+            stmt.setInt(2, profileId);
+            stmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated == 0) {
+                // If no rows were updated, it means the session was not active, so save a new session
+                saveSession(profileId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

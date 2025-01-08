@@ -160,6 +160,7 @@ public class LandingPageUI {
             HBox profileBox = createClickableBox(profile.getUsername(), avatarImage);
             profileBox.setOnMouseClicked(e -> {
                 if (SessionUtils.isSessionActive(profile.getProfileId())) {
+                    SessionUtils.updateSession(profile.getProfileId());
                     BrowserUtils.openProfileHomePage(primaryStage, profile.getProfileId());
                 } else {
                     openAuthenticationPopup(primaryStage, profile.getUsername(), profile.getEmail(), profile.getProfileId());
