@@ -23,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 
 import com.evoza.EvozaApp;
 import com.evoza.ui.CustomHomepageTemp;
+import com.evoza.utils.ProfileManager;
 import com.evoza.utils.SessionUtils;
 
 import java.net.CookieHandler;
@@ -112,9 +113,14 @@ public class BrowserInterface {
 
         logoutMenuItem.setOnAction(e -> {
             // Clear session and redirect to login page
-            SessionUtils.clearSession(profileId);
-            BrowserStage.close();
-            EvozaApp.openLandingPage();
+            CustomPopupAlert.showConfirmation("Are you sure you want to logout this profile?", confirmed -> {
+                    if (confirmed) {
+                        SessionUtils.clearSession(profileId);
+                        BrowserStage.close();
+                        EvozaApp.openLandingPage();
+                    }
+                });
+            
         });
 
         profileMenu.getItems().addAll(profileMenuItem, logoutMenuItem);

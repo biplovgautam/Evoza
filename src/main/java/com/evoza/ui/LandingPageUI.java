@@ -10,7 +10,10 @@ import com.evoza.utils.BrowserUtils;
 import com.evoza.ui.UserVerificationUI;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -33,6 +36,7 @@ import javafx.stage.StageStyle;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public class LandingPageUI {
     private static BorderPane root;
@@ -205,9 +209,13 @@ public class LandingPageUI {
             MenuItem editItem = new MenuItem("Edit");
             MenuItem removeItem = new MenuItem("Remove");
             removeItem.setOnAction(e -> {
-                ProfileManager.deleteProfile(text);
-                // logic to update the UI after deletion
-                loadProfiles();
+                CustomPopupAlert.showConfirmation("Are you sure you want to remove this profile?", confirmed -> {
+                    if (confirmed) {
+                        ProfileManager.deleteProfile(text);
+                        // logic to update the UI after deletion
+                        loadProfiles();
+                    }
+                });
             });
             contextMenu.getItems().addAll(editItem, removeItem);
             editButton.setOnMouseClicked(e -> {contextMenu.show(editButton, e.getScreenX(), e.getScreenY());});
