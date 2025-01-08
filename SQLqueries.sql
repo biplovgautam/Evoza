@@ -26,7 +26,7 @@ CREATE TABLE bookmarks (
   bookmark_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   profile_id INTEGER,
   title VARCHAR(255),
-  weburl VARCHAR(2083),
+  weburl VARCHAR(2083)
 );
 
 CREATE TABLE histories (
@@ -34,7 +34,7 @@ CREATE TABLE histories (
   profile_id INTEGER,
   weburl VARCHAR(2083),
   title VARCHAR(255),
-  visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE sessions (
@@ -42,7 +42,7 @@ CREATE TABLE sessions (
   profile_id INTEGER,
   token VARCHAR(2083),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  expires_at TIMESTAMP,
+  expires_at TIMESTAMP
 );
 
 
