@@ -3,6 +3,7 @@ package com.evoza.ui;
 import com.evoza.utils.AuthenticationManager;
 import com.evoza.utils.AvatarFetcher;
 import com.evoza.utils.Profiles;
+import com.evoza.utils.SessionUtils;
 import com.evoza.utils.ProfileManager;
 import com.evoza.utils.ProfileFetcher;
 import com.evoza.utils.BrowserUtils;
@@ -157,8 +158,13 @@ public class LandingPageUI {
         for (Profiles profile : profiles) {
             Image avatarImage = AvatarFetcher.fetchAvatarById(profile.getProfilePicId());
             HBox profileBox = createClickableBox(profile.getUsername(), avatarImage);
-            profileBox.setOnMouseClicked(e -> openAuthenticationPopup(primaryStage,profile.getUsername(), profile.getEmail(), profile.getProfileId()));
-            profilesContainer.add(profileBox, column, row);
+            profileBox.setOnMouseClicked(e -> {
+                if (SessionUtils.isSessionActive(profile.getProfileId())) {
+                    BrowserUtils.openProfileHomePage(primaryStage, profile.getProfileId());
+                } else {
+                    openAuthenticationPopup(primaryStage, profile.getUsername(), profile.getEmail(), profile.getProfileId());
+                }
+            });            profilesContainer.add(profileBox, column, row);
             column++;
             if (column == 5) { // Change this value to set the number of columns
                 column = 0;

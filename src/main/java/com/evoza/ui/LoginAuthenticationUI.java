@@ -3,6 +3,7 @@ package com.evoza.ui;
 import com.evoza.utils.BrowserUtils;
 import com.evoza.utils.EmailUtil;
 import com.evoza.utils.ProfileManager;
+import com.evoza.utils.SessionUtils;
 import com.evoza.utils.AuthenticationManager;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -114,6 +115,9 @@ public class LoginAuthenticationUI {
         submitButton.setOnAction(e -> {
             boolean isAuthenticated = AuthenticationManager.authenticate(username, passwordField.getText());
             if (isAuthenticated) {
+                // save user login session
+                SessionUtils.saveSession(profileId);
+
                 authStage.close();
                 BrowserUtils.openProfileHomePage(primaryStage, profileId);
             } else {
