@@ -4,7 +4,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -19,6 +21,7 @@ import javafx.stage.StageStyle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import com.evoza.ui.CustomHomepageTemp;
+import com.evoza.utils.SessionUtils;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -57,7 +60,7 @@ public class BrowserInterface {
         HBox customTitleBar = CustomTitleBarWithTabs(profileStage);
 
         // Create the toolbar
-        HBox toolbar = createToolbar();
+        HBox toolbar = createToolbar(profileStage);
 
         // Combine custom title bar, toolbar, and content area in a VBox
         VBox mainContainer = new VBox();
@@ -69,7 +72,6 @@ public class BrowserInterface {
 
         Scene scene = new Scene(borderPane, 1024, 768);
         profileStage.setMaximized(true); // Open in maximized mode
-        // scene.getStylesheets().add(getClass().getResource("/css/newtab.css").toExternalForm());
         profileStage.setScene(scene);
         profileStage.show();
 
@@ -85,17 +87,37 @@ public class BrowserInterface {
         
     }
 
-    private HBox createToolbar() {
+    private HBox createToolbar(Stage BrowserStage) {
         HBox toolbar = new HBox(10);
         toolbar.setPadding(new Insets(10));
         toolbar.setStyle("-fx-background-color: #d9d9d9;");
 
         Image profileIcon = new Image(getClass().getResourceAsStream("/images/icons/user.png"), 22, 22, true, true);
-        Button profileButton = createIconButton(profileIcon, "Back", 20, 20);
+        Button profileButton = createIconButton(profileIcon, "profile", 20, 20);
         profileButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         profileButton.setOnMouseEntered(e -> profileButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         profileButton.setOnMouseExited(e -> profileButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         
+        
+        ContextMenu profileMenu = new ContextMenu();
+        MenuItem profileMenuItem = new MenuItem("Profile");
+        MenuItem logoutMenuItem = new MenuItem("Logout");
+
+        profileMenuItem.setOnAction(e -> {
+            // Open profile settings or page
+            System.out.println("Profile clicked");
+        });
+
+        logoutMenuItem.setOnAction(e -> {
+            // Clear session and redirect to login page
+            SessionUtils.clearSession(profileId);
+            BrowserStage.close();
+            // LandingPageUI.start(BrowserStage);
+        });
+
+        profileMenu.getItems().addAll(profileMenuItem, logoutMenuItem);
+        profileButton.setOnAction(e -> profileMenu.show(profileButton, javafx.geometry.Side.BOTTOM, 0, 0));
+
         Image backIcon = new Image(getClass().getResourceAsStream("/images/icons/back.png"), 25, 25, true, true);
         Button backButton = createIconButton(backIcon, "Back", 20, 20);
         backButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
@@ -150,7 +172,7 @@ public class BrowserInterface {
         goButton.setOnMouseExited(e -> goButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         
         Image bookmarksIcon = new Image(getClass().getResourceAsStream("/images/icons/bookmark-white.png"), 25, 25, true, true);
-        Button bookmarksButton = createIconButton(bookmarksIcon, "Go", 20, 20);
+        Button bookmarksButton = createIconButton(bookmarksIcon, "bookmark", 20, 20);
         bookmarksButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         bookmarksButton.setOnMouseEntered(e -> bookmarksButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         bookmarksButton.setOnMouseExited(e -> bookmarksButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
@@ -167,13 +189,13 @@ public class BrowserInterface {
 
 
         Image downloadsIcon = new Image(getClass().getResourceAsStream("/images/icons/download.png"), 25, 25, true, true);
-        Button downloadsButton = createIconButton(downloadsIcon, "Go", 20, 20);
+        Button downloadsButton = createIconButton(downloadsIcon, "Downloads", 20, 20);
         downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         downloadsButton.setOnMouseEntered(e -> downloadsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         downloadsButton.setOnMouseExited(e -> downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
 
         Image optionsIcon = new Image(getClass().getResourceAsStream("/images/icons/settings.png"), 25, 25, true, true);
-        Button optionsButton = createIconButton(optionsIcon, "Go", 18, 20);
+        Button optionsButton = createIconButton(optionsIcon, "Options", 18, 20);
         optionsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         optionsButton.setOnMouseEntered(e -> optionsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         optionsButton.setOnMouseExited(e -> optionsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));

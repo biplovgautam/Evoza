@@ -56,4 +56,14 @@ public class SessionUtils {
             e.printStackTrace();
         }
     }
+    public static void clearSession(int profileId) {
+        try (Connection conn = DatabaseHelper.getConnection()) {
+            String query = "DELETE FROM sessions WHERE profile_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, profileId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
