@@ -27,12 +27,22 @@ public class CustomPopupAlert {
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(10));
-        vbox.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 0;");
+        vbox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-background-radius: 10;");
+        vbox.setMinHeight(200);
+        // Create a close button
+        Button closeButton = new Button("X");
+        closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14; -fx-cursor: hand;");
+        closeButton.setOnAction(e -> notificationStage.close());
+        // Create a HBox to hold the close button and align it to the top right
+        HBox topRightBox = new HBox();
+        topRightBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+        topRightBox.getChildren().add(closeButton);
+        topRightBox.setPadding(new Insets((-20), 0, 0, 0));
 
         Text messageText = new Text(message);
-        messageText.setStyle("-fx-font-size: 14;");
+        messageText.setStyle("-fx-font-size: 14; -fx-fill: white;");
 
-        vbox.getChildren().addAll(messageText);
+        vbox.getChildren().addAll(topRightBox,messageText);
 
         Scene scene = new Scene(vbox, 300, 100);
         scene.setFill(Color.TRANSPARENT);
@@ -54,7 +64,7 @@ public class CustomPopupAlert {
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(10));
-        vbox.setStyle("-fx-background-color:rgb(99, 115, 131); -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 0;");
+        vbox.setStyle("-fx-background-color:rgb(126, 135, 144); -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-width: 0;");
 
         Text messageText = new Text(message);
         messageText.setStyle("-fx-font-size: 14;");

@@ -23,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 
 import com.evoza.EvozaApp;
 import com.evoza.ui.CustomHomepageTemp;
+import com.evoza.utils.BookmarkUtils;
 import com.evoza.utils.ProfileManager;
 import com.evoza.utils.SessionUtils;
 
@@ -184,6 +185,14 @@ public class BrowserInterface {
         bookmarksButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         bookmarksButton.setOnMouseEntered(e -> bookmarksButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         bookmarksButton.setOnMouseExited(e -> bookmarksButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        bookmarksButton.setOnAction(e -> {
+            String currentURL = searchBar.getText();
+            if (!currentURL.isEmpty()) {
+                // BookmarkUtils.saveBookmark(profileId, "Bookmark Title", currentURL);
+                // CustomPopupAlert.showNotification("Bookmark saved!");
+                BookmarkSaveUI.openbookmarksave(BrowserStage, profileId, currentURL);
+            }
+        });
         
         Rectangle verticalLine = new Rectangle();
         verticalLine.setWidth(2); // Set the width of the line
