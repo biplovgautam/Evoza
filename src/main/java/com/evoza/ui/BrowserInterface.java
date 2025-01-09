@@ -174,7 +174,7 @@ public class BrowserInterface {
             "-fx-prompt-text-fill: rgba(0, 0, 0, 0.62);" // Set placeholder text opacity
         );
 
-        Image goIcon = new Image(getClass().getResourceAsStream("/images/icons/go.png"), 25, 25, true, true);
+        Image goIcon = new Image(getClass().getResourceAsStream("/images/icons/search.png"), 25, 25, true, true);
         Button goButton = createIconButton(goIcon, "Go", 20, 20);
         goButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         goButton.setOnMouseEntered(e -> goButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
