@@ -80,12 +80,12 @@ public class BookmarkSaveUI {
         submitButton.setOnAction(e -> {
             String title = titlefield.getText();
             String url1 = urlField.getText();
-            if (title.isEmpty() || url.isEmpty()) {
+            if (title.isEmpty() || url1.isEmpty()) {
                 CustomPopupAlert.showNotification("Please fill all the fields");
-            } else if (BookmarkUtils.bookmarkExists(profileId, url)) {
+            } else if (BookmarkUtils.bookmarkExists(profileId, url1)) {
                 CustomPopupAlert.showNotification("Bookmark already exists");
             } else {
-                BookmarkUtils.saveBookmark(profileId, title, url);
+                BookmarkUtils.saveBookmark(profileId, title, url1);
                 CustomPopupAlert.showNotification("Bookmark saved successfully");
                 bookStage.close();
             }

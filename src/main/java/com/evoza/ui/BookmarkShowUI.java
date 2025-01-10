@@ -5,7 +5,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -43,23 +48,77 @@ public class BookmarkShowUI {
 
         VBox titlebox = new VBox(10);
         titlebox.setAlignment(javafx.geometry.Pos.CENTER);
-        Text titleText = new Text("Saved Bookmark");
+        Text titleText = new Text("Saved Bookmarks");
         titleText.textAlignmentProperty().set(javafx.scene.text.TextAlignment.CENTER);
         titleText.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-fill: #ffffff;");
         titlebox.getChildren().addAll(titleText);
         vbox.getChildren().addAll(titleBar,titlebox);
 
+        VBox bookmarksvbox = new VBox(10);
+        bookmarksvbox.setAlignment(Pos.CENTER);
+        bookmarksvbox.setStyle("-fx-background-color: #9aafc0;");
+
+
+
         List<BookmarkUtils.Bookmark> bookmarks = BookmarkUtils.getBookmarks(profileId);
         for (BookmarkUtils.Bookmark bookmark : bookmarks) {
-            System.out.println(bookmark.getTitle());
-            Text bookmarkText = new Text(bookmark.getTitle() + " - " + bookmark.getWeburl());
-            vbox.getChildren().add(bookmarkText);
+           
+            HBox bookmarkButton = createBookmarkHBox(bookmark);
+            bookmarksvbox.getChildren().add(bookmarkButton);
         }
 
 
-        Scene scene = new Scene(vbox, 400, 300);
+
+        ScrollPane scrollPane = new ScrollPane(bookmarksvbox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: #9aafc0;");
+        vbox.getChildren().addAll(scrollPane);
+
+
+        Scene scene = new Scene(vbox, 400, 500);
         scene.setFill(Color.TRANSPARENT);
         bookStage.setScene(scene);
         bookStage.show();
+    }
+    // private static Button createBookmarkButton(BookmarkUtils.Bookmark bookmark) {
+    //     Button button = new Button(bookmark.getTitle() + " - " + bookmark.getWeburl());
+    //     button.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 10; -fx-padding: 10;");
+    //     button.setMaxWidth(Double.MAX_VALUE);
+    //     button.setOnAction(e -> {
+    //         // browserInterface.openNewTabWithURL(bookmark.getWeburl());
+    //     });
+    //     return button;
+    // }
+
+    private static HBox createBookmarkHBox(BookmarkUtils.Bookmark bookmark) {
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.setPadding(new Insets(10));
+        hbox.setStyle("-fx-background-color: #e6e8e9; -fx-background-radius: 10;");
+
+        VBox infoVBox = new VBox(5);
+        Text titleText = new Text(bookmark.getTitle());
+        Text urlText = new Text(bookmark.getWeburl());
+        infoVBox.getChildren().addAll(titleText, urlText);
+
+        VBox buttonVBox = new VBox();
+        buttonVBox.setAlignment(Pos.CENTER_RIGHT);
+        Button optionsButton = new Button("X");
+        optionsButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-cursor: hand;");
+
+        
+
+       
+        optionsButton.setOnAction(e -> {
+            BookmarkUtils.removeBookmark(bookmark.getBookmarkId());
+            
+        });
+
+        buttonVBox.getChildren().add(optionsButton);
+
+        hbox.getChildren().addAll(infoVBox, buttonVBox);
+        HBox.setHgrow(infoVBox, Priority.ALWAYS);
+
+        return hbox;
     }
 }
