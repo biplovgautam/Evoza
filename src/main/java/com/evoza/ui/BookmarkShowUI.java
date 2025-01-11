@@ -1,6 +1,8 @@
 package com.evoza.ui;
 
 import com.evoza.utils.BookmarkUtils;
+import com.evoza.utils.ProfileManager;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -110,7 +112,13 @@ public class BookmarkShowUI {
 
        
         optionsButton.setOnAction(e -> {
-            BookmarkUtils.removeBookmark(bookmark.getBookmarkId());
+            CustomPopupAlert.showConfirmation("Are you sure you want to remove this bookmark?", confirmed -> {
+                    if (confirmed) {
+                        BookmarkUtils.removeBookmark(bookmark.getBookmarkId());
+                        // logic to reload the boook marks here by removing childs of bookmarks vbox and add them again
+                    }
+                });
+            
             
         });
 
