@@ -23,8 +23,11 @@ import javafx.stage.StageStyle;
 import java.util.List;
 
 public class BookmarkShowUI {
+    static VBox bookmarksvbox = new VBox(10);
+    static int profileId; 
 
     public static void openbookmarkshow(Stage parentStage, int profileId) {
+        BookmarkShowUI.profileId = profileId;
         Stage bookStage = new Stage();
         bookStage.initModality(Modality.APPLICATION_MODAL);
         bookStage.initStyle(StageStyle.TRANSPARENT);
@@ -56,18 +59,19 @@ public class BookmarkShowUI {
         titlebox.getChildren().addAll(titleText);
         vbox.getChildren().addAll(titleBar,titlebox);
 
-        VBox bookmarksvbox = new VBox(10);
+        // VBox bookmarksvbox = new VBox(10);
         bookmarksvbox.setAlignment(Pos.CENTER);
         bookmarksvbox.setStyle("-fx-background-color: #9aafc0;");
 
 
 
-        List<BookmarkUtils.Bookmark> bookmarks = BookmarkUtils.getBookmarks(profileId);
-        for (BookmarkUtils.Bookmark bookmark : bookmarks) {
+        // List<BookmarkUtils.Bookmark> bookmarks = BookmarkUtils.getBookmarks(profileId);
+        // for (BookmarkUtils.Bookmark bookmark : bookmarks) {
            
-            HBox bookmarkButton = createBookmarkHBox(bookmark);
-            bookmarksvbox.getChildren().add(bookmarkButton);
-        }
+        //     HBox bookmarkButton = createBookmarkHBox(bookmark);
+        //     bookmarksvbox.getChildren().add(bookmarkButton);
+        // }
+        loadbookmarks();
 
 
 
@@ -91,6 +95,17 @@ public class BookmarkShowUI {
     //     });
     //     return button;
     // }
+
+    private static void loadbookmarks(){
+        bookmarksvbox.getChildren().clear();
+        List<BookmarkUtils.Bookmark> bookmarks = BookmarkUtils.getBookmarks(profileId);
+        for (BookmarkUtils.Bookmark bookmark : bookmarks) {
+           
+            HBox bookmarkButton = createBookmarkHBox(bookmark);
+            bookmarksvbox.getChildren().add(bookmarkButton);
+        }
+
+    }
 
     private static HBox createBookmarkHBox(BookmarkUtils.Bookmark bookmark) {
         HBox hbox = new HBox(10);
@@ -116,6 +131,7 @@ public class BookmarkShowUI {
                     if (confirmed) {
                         BookmarkUtils.removeBookmark(bookmark.getBookmarkId());
                         // logic to reload the boook marks here by removing childs of bookmarks vbox and add them again
+                        BookmarkShowUI.loadbookmarks();
                     }
                 });
             
