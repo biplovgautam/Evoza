@@ -258,3 +258,4 @@ public class profilePopup {
         profileStage.showAndWait();
     }
 }
+// Profile Pop-Up Added
