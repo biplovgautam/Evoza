@@ -27,6 +27,7 @@ import com.evoza.utils.BookmarkUtils;
 import com.evoza.utils.ProfileManager;
 import com.evoza.utils.SessionUtils;
 
+import java.io.InputStream;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -77,6 +78,16 @@ public class BrowserInterface {
         Scene scene = new Scene(borderPane, 1024, 768);
         profileStage.setMaximized(true); // Open in maximized mode
         profileStage.setScene(scene);
+        // Set the application icon
+        // it is still not working
+        
+        InputStream iconStream = getClass().getResourceAsStream("/images/icons/logo.png");
+        if (iconStream == null) {
+            System.err.println("Icon resource not found!");
+        } else {
+            System.out.println("Icon resource found!");
+            profileStage.getIcons().add(new Image(iconStream));
+        }
         profileStage.show();
 
 
