@@ -227,7 +227,6 @@ public class BrowserInterface {
         downloadsButton.setOnMouseEntered(e -> downloadsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         downloadsButton.setOnMouseExited(e -> downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         downloadsButton.setOnAction(e -> {
-            String currentURL = searchBar.getText();
                 if (profileId == -1) {
                     CustomPopupAlert.showNotification("Please login to see downloads.");
                     return;
@@ -241,6 +240,7 @@ public class BrowserInterface {
         optionsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         optionsButton.setOnMouseEntered(e -> optionsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         optionsButton.setOnMouseExited(e -> optionsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        
         
         // Create context menu for options button
         ContextMenu optionsMenu = new ContextMenu();
@@ -258,7 +258,14 @@ public class BrowserInterface {
         });
 
         optionsMenu.getItems().addAll(historyMenuItem, bookmarksMenuItem);
-        optionsButton.setOnAction(e -> optionsMenu.show(optionsButton, javafx.geometry.Side.BOTTOM, 0, 0));
+        optionsButton.setOnAction(e ->{ 
+            if (profileId == -1) {
+                CustomPopupAlert.showNotification("Please login to see options.");
+                return;
+            }else{
+            optionsMenu.show(optionsButton, javafx.geometry.Side.BOTTOM, 0, 0);
+            }
+        });
 
 
         backButton.setOnAction(e -> navigateBack());
