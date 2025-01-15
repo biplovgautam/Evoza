@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -99,9 +100,7 @@ public class LoginAuthenticationUI {
             
             // Open the UserVerificationUI for OTP verification
             UserVerificationUI.openVerificationPopup(primaryStage, username, email, profileId);
-            // Close the login stage
-            // authStage.close();
-            // we are not closing the stage we are directly opening the verification stage
+            
 
 
         });
@@ -111,6 +110,12 @@ public class LoginAuthenticationUI {
         submitButton.setPrefWidth(120);
         submitButton.setPrefHeight(40);
         HBox.setMargin(submitButton, new Insets(30, 0, 0, 80));
+
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                submitButton.fire();
+            }
+        });
 
         submitButton.setOnAction(e -> {
             boolean isAuthenticated = AuthenticationManager.authenticate(username, passwordField.getText());
