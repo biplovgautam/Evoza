@@ -201,7 +201,12 @@ public class BrowserInterface {
             if (!currentURL.isEmpty()) {
                 // BookmarkUtils.saveBookmark(profileId, "Bookmark Title", currentURL);
                 // CustomPopupAlert.showNotification("Bookmark saved!");
+                if (profileId == -1) {
+                    CustomPopupAlert.showNotification("Please login to save bookmarks.");
+                    return;
+                }else{
                 BookmarkSaveUI.openbookmarksave(BrowserStage, profileId, currentURL);
+            }
             }
         });
         
