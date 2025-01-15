@@ -226,6 +226,15 @@ public class BrowserInterface {
         downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         downloadsButton.setOnMouseEntered(e -> downloadsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         downloadsButton.setOnMouseExited(e -> downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        downloadsButton.setOnAction(e -> {
+            String currentURL = searchBar.getText();
+                if (profileId == -1) {
+                    CustomPopupAlert.showNotification("Please login to see downloads.");
+                    return;
+                }else{
+                    // logic to show downloads if any
+            }
+        });
 
         Image optionsIcon = new Image(getClass().getResourceAsStream("/images/icons/settings.png"), 25, 25, true, true);
         Button optionsButton = createIconButton(optionsIcon, "Options", 18, 20);
