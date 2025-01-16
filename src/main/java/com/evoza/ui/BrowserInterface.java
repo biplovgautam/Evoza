@@ -220,7 +220,7 @@ public class BrowserInterface {
 
 
 
-
+        // we won't be having download option we will be updating it to make diffent buttons for history and bookmarks
         Image downloadsIcon = new Image(getClass().getResourceAsStream("/images/icons/download.png"), 25, 25, true, true);
         Button downloadsButton = createIconButton(downloadsIcon, "Downloads", 20, 20);
         downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
