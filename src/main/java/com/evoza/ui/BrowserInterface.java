@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BrowserInterface {
+    private static HBox tabButtonsArea;
     private List<Button> tabButtons = new ArrayList<>();
     private List<Rectangle> verticalLines = new ArrayList<>();
     private StackPane contentArea = new StackPane();
@@ -92,7 +93,7 @@ public class BrowserInterface {
 
 
         // Automatically open one tab when the profile home page is opened
-        HBox tabButtonsArea = (HBox) customTitleBar.lookup("#tabButtonsArea");
+        tabButtonsArea = (HBox) customTitleBar.lookup("#tabButtonsArea");
         if (tabButtonsArea != null) {
             System.out.println("one tab opned automatically");
             addNewTab(tabButtonsArea);
@@ -199,8 +200,7 @@ public class BrowserInterface {
         bookmarksButton.setOnAction(e -> {
             String currentURL = searchBar.getText();
             if (!currentURL.isEmpty()) {
-                // BookmarkUtils.saveBookmark(profileId, "Bookmark Title", currentURL);
-                // CustomPopupAlert.showNotification("Bookmark saved!");
+               
                 if (profileId == -1) {
                     CustomPopupAlert.showNotification("Please login to save bookmarks.");
                     return;
@@ -218,20 +218,17 @@ public class BrowserInterface {
         verticalLine.setFill(Color.rgb(0, 0, 10, 0.8));
         HBox.setMargin(verticalLine, new Insets(0, 5, 0, 15)); // Adjust margins as needed (top, right, bottom, left)
 
-
-
-        // we won't be having download option we will be updating it to make diffent buttons for history and bookmarks
-        Image downloadsIcon = new Image(getClass().getResourceAsStream("/images/icons/download.png"), 25, 25, true, true);
-        Button downloadsButton = createIconButton(downloadsIcon, "Downloads", 20, 20);
-        downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
-        downloadsButton.setOnMouseEntered(e -> downloadsButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
-        downloadsButton.setOnMouseExited(e -> downloadsButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
-        downloadsButton.setOnAction(e -> {
-                if (profileId == -1) {
-                    CustomPopupAlert.showNotification("Please login to see downloads.");
-                    return;
-                }else{
-                    // logic to show downloads if any
+        Image historyIcon = new Image(getClass().getResourceAsStream("/images/icons/history.png"), 25, 25, true, true);
+        Button historyButton = createIconButton(historyIcon, "history", 20, 20);
+        historyButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
+        historyButton.setOnMouseEntered(e -> historyButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        historyButton.setOnMouseExited(e -> historyButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
+        historyButton.setOnAction(e -> {
+            if (profileId == -1) {
+                CustomPopupAlert.showNotification("Please login to see history.");
+                return;
+            }else{
+                // logic to show downloads if any
             }
         });
 
@@ -244,20 +241,14 @@ public class BrowserInterface {
         
         // Create context menu for options button
         ContextMenu optionsMenu = new ContextMenu();
-        MenuItem historyMenuItem = new MenuItem("History");
         MenuItem bookmarksMenuItem = new MenuItem("Bookmarks");
-
-        historyMenuItem.setOnAction(e -> {
-            // Open history page or dialog
-            System.out.println("History clicked");
-        });
 
         bookmarksMenuItem.setOnAction(e -> {
             // Show bookmarks
             BookmarkShowUI.openbookmarkshow(BrowserStage, profileId);
         });
 
-        optionsMenu.getItems().addAll(historyMenuItem, bookmarksMenuItem);
+        optionsMenu.getItems().addAll(bookmarksMenuItem);
         optionsButton.setOnAction(e ->{ 
             if (profileId == -1) {
                 CustomPopupAlert.showNotification("Please login to see options.");
@@ -281,7 +272,7 @@ public class BrowserInterface {
         });
         goButton.setOnAction(e -> loadURL(searchBar.getText()));
 
-        toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, searchengineButton,searchBar, goButton,bookmarksButton,verticalLine,downloadsButton,optionsButton);
+        toolbar.getChildren().addAll(profileButton,backButton, forwardButton, refreshButton, homeButton, searchengineButton,searchBar, goButton,bookmarksButton,verticalLine,historyButton,optionsButton);
 
         return toolbar;
     }
@@ -333,16 +324,6 @@ public class BrowserInterface {
         // Enable JavaScript
         webEngine.setJavaScriptEnabled(true);
             
-        
-
-        // List<String> bookmarks = Arrays.asList("https://www.google.com", "https://www.bing.com");
-        // List<String> favoritePages = Arrays.asList("https://www.youtube.com", "https://www.instagram.com");
-        // List<String> recentPages = Arrays.asList("https://www.recent.com", "https://www.anotherrecent.com");
-        // String homePageContent = CustomHomepageTemp.generateHomePageContent(bookmarks, favoritePages, recentPages);
-        
-        // // Load the generated HTML content into the WebView
-        // webEngine.loadContent(homePageContent);
-            
         // Load a website
         // yahoo, google, bing, 
         webEngine.load("https://www.bing.com");
@@ -373,6 +354,86 @@ public class BrowserInterface {
         switchToTab(tabButton);
         
     }
+
+
+    // Public method to add a new tab with a specified URL
+public void addNewTabWithUrl(String url) {
+    if (tabCount >= MAX_TABS) {
+        CustomPopupAlert.showNotification("Maximum number of tabs reached.");
+        return;
+    }
+
+    tabCount++;
+    Button tabButton = new Button();
+    tabButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-size: 14px; -fx-padding: 5px 10px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-cursor: hand;");
+    tabButton.setPrefWidth(140); // Increase the width
+
+    // Create a close button
+    Button closeButton = new Button("x");
+    closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #000000; -fx-font-size: 12px; -fx-cursor: hand;");
+    closeButton.setOnAction(e -> closeTab(tabButton, tabButtonsArea));
+
+    // Create an HBox to contain the favicon, tab label, and the close button
+    HBox tabContent = new HBox();
+    tabContent.setAlignment(Pos.CENTER_LEFT);
+    tabContent.setSpacing(2); // Space between favicon, label, and close button
+
+    // Create an ImageView for the favicon
+    ImageView faviconView = new ImageView();
+    faviconView.setFitHeight(16);
+    faviconView.setFitWidth(16);
+
+    // Add the tab label and the close button to the HBox
+    Label tabLabel = new Label("New Tab");
+    tabLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 14px;");
+
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+    tabContent.getChildren().addAll(faviconView, tabLabel, spacer, closeButton);
+
+    // Set the HBox as the graphic for the tab button
+    tabButton.setGraphic(tabContent);
+
+    // Create a new WebView
+    WebView webView = new WebView();
+    WebEngine webEngine = webView.getEngine();
+
+    // Set user-agent to mimic a modern browser
+    webEngine.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36");
+
+    // Enable JavaScript
+    webEngine.setJavaScriptEnabled(true);
+
+    // Load the provided URL
+    webEngine.load(url);
+
+    // Add a listener to update the tab label and favicon when the page title changes
+    webEngine.titleProperty().addListener((obs, oldTitle, newTitle) -> {
+        tabLabel.setText(newTitle);
+    });
+
+    webEngine.locationProperty().addListener((obs, oldLocation, newLocation) -> {
+        if (tabButton.equals(tabButtons.get(activeTabIndex))) {
+            searchBar.setText(newLocation);
+        }
+        updateFavicon(faviconView, newLocation);
+    });
+
+    // Add event handlers for the tab button
+    tabButton.setOnAction(e -> switchToTab(tabButton));
+
+    // Add the tab button to the list and the tab buttons area
+    tabButtons.add(tabButton);
+    tabButtonsArea.getChildren().add(tabButtonsArea.getChildren().size() - 1, tabButton); // Add before the "+" button
+
+    addVerticalLine(tabButtonsArea);
+
+    // Add the WebView to the content area and switch to the new tab
+    contentArea.getChildren().add(webView);
+    switchToTab(tabButton);
+}
+
+
     private void addVerticalLine(HBox tabButtonsArea) {
         Rectangle verticalLine = new Rectangle();
         verticalLine.setWidth(2); // Set the width of the line
