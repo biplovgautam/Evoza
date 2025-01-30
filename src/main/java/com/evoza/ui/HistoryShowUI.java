@@ -54,7 +54,7 @@ public class HistoryShowUI {
         historyVBox.setAlignment(Pos.CENTER);
         historyVBox.setStyle("-fx-background-color: #9aafc0;");
 
-        loadHistory();
+        loadHistory( historyStage);
 
         ScrollPane scrollPane = new ScrollPane(historyVBox);
         scrollPane.setFitToWidth(true);
@@ -68,16 +68,16 @@ public class HistoryShowUI {
         historyStage.show();
     }
 
-    private static void loadHistory() {
+    private static void loadHistory(Stage historyStage) {
         historyVBox.getChildren().clear();
         List<HistoryEntry> history = HistoryManager.getHistory(profileId);
         for (HistoryEntry entry : history) {
-            HBox historyItem = createHistoryHBox(entry);
+            HBox historyItem = createHistoryHBox(entry, historyStage);
             historyVBox.getChildren().add(historyItem);
         }
     }
 
-    private static HBox createHistoryHBox(HistoryEntry entry) {
+    private static HBox createHistoryHBox(HistoryEntry entry, Stage historyStage) {
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.setPadding(new Insets(10));
@@ -86,7 +86,13 @@ public class HistoryShowUI {
     
         VBox infoVBox = new VBox(5);
         infoVBox.setPrefWidth(280); // Set width for content
+        infoVBox.setStyle("-fx-cursor: hand;");
     
+        infoVBox.setOnMouseClicked(e -> {
+            BrowserInterface.openUrlInNewTab(entry.getUrl());
+            historyStage.close();
+        });
+        
         Text titleText = new Text(entry.getTitle());
         titleText.setStyle("-fx-font-weight: bold;");
         titleText.setWrappingWidth(280);
@@ -106,7 +112,7 @@ public class HistoryShowUI {
             CustomPopupAlert.showConfirmation("Delete this history entry?", confirmed -> {
                 if (confirmed) {
                     HistoryManager.removeHistoryEntry(entry.getHistoryId());
-                    loadHistory();
+                    loadHistory(historyStage);
                 }
             });
         });

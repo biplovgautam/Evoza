@@ -65,7 +65,7 @@ public class BookmarkShowUI {
 
 
 
-        loadbookmarks();
+        loadbookmarks(bookStage);
 
 
 
@@ -82,18 +82,18 @@ public class BookmarkShowUI {
     }
 
 
-    private static void loadbookmarks(){
+    private static void loadbookmarks(Stage bookmarkStage){
         bookmarksvbox.getChildren().clear();
         List<BookmarkUtils.Bookmark> bookmarks = BookmarkUtils.getBookmarks(profileId);
         for (BookmarkUtils.Bookmark bookmark : bookmarks) {
            
-            HBox bookmarkButton = createBookmarkHBox(bookmark);
+            HBox bookmarkButton = createBookmarkHBox(bookmark,bookmarkStage);
             bookmarksvbox.getChildren().add(bookmarkButton);
         }
 
     }
 
-    private static HBox createBookmarkHBox(BookmarkUtils.Bookmark bookmark) {
+    private static HBox createBookmarkHBox(BookmarkUtils.Bookmark bookmark, Stage bookmarkStage) {
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.setPadding(new Insets(10));
@@ -104,7 +104,7 @@ public class BookmarkShowUI {
         infoVBox.setStyle("-fx-cursor: hand;");
         infoVBox.setOnMouseClicked(e -> {
             BrowserInterface.openUrlInNewTab(bookmark.getWeburl());
-            // bookStage.close();
+            bookmarkStage.close();
         });
         Text titleText = new Text(bookmark.getTitle());
         Text urlText = new Text(bookmark.getWeburl());
@@ -123,7 +123,7 @@ public class BookmarkShowUI {
                     if (confirmed) {
                         BookmarkUtils.removeBookmark(bookmark.getBookmarkId());
                         // logic to reload the boook marks here by removing childs of bookmarks vbox and add them again
-                        BookmarkShowUI.loadbookmarks();
+                        BookmarkShowUI.loadbookmarks(bookmarkStage);
                     }
                 });
             
