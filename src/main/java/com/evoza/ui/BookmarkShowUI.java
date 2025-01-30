@@ -65,12 +65,6 @@ public class BookmarkShowUI {
 
 
 
-        // List<BookmarkUtils.Bookmark> bookmarks = BookmarkUtils.getBookmarks(profileId);
-        // for (BookmarkUtils.Bookmark bookmark : bookmarks) {
-           
-        //     HBox bookmarkButton = createBookmarkHBox(bookmark);
-        //     bookmarksvbox.getChildren().add(bookmarkButton);
-        // }
         loadbookmarks();
 
 
@@ -86,15 +80,7 @@ public class BookmarkShowUI {
         bookStage.setScene(scene);
         bookStage.show();
     }
-    // private static Button createBookmarkButton(BookmarkUtils.Bookmark bookmark) {
-    //     Button button = new Button(bookmark.getTitle() + " - " + bookmark.getWeburl());
-    //     button.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 10; -fx-padding: 10;");
-    //     button.setMaxWidth(Double.MAX_VALUE);
-    //     button.setOnAction(e -> {
-    //         // browserInterface.openNewTabWithURL(bookmark.getWeburl());
-    //     });
-    //     return button;
-    // }
+
 
     private static void loadbookmarks(){
         bookmarksvbox.getChildren().clear();
@@ -114,6 +100,12 @@ public class BookmarkShowUI {
         hbox.setStyle("-fx-background-color: #e6e8e9; -fx-background-radius: 10;");
 
         VBox infoVBox = new VBox(5);
+        // Make infoVBox clickable
+        infoVBox.setStyle("-fx-cursor: hand;");
+        infoVBox.setOnMouseClicked(e -> {
+            BrowserInterface.openUrlInNewTab(bookmark.getWeburl());
+            // bookStage.close();
+        });
         Text titleText = new Text(bookmark.getTitle());
         Text urlText = new Text(bookmark.getWeburl());
         infoVBox.getChildren().addAll(titleText, urlText);

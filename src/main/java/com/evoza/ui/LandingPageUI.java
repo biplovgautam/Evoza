@@ -260,8 +260,10 @@ public class LandingPageUI {
         SignupAuthenticationUI.openSignupPopup(primaryStage);
     }
     public static void openAuthenticationPopup(Stage primaryStage, String username, String email, int profileId) {
+        Stage authStage = new Stage(); // Create auth stage
         if (!ProfileManager.isUserActive(username)) {
-            UserVerificationUI.openVerificationPopup(primaryStage, username, email,profileId);
+            // Pass false to indicate this is new signup verification
+            UserVerificationUI.openVerificationPopup(primaryStage, authStage, username, email, profileId, false);
             return;
         }
         else{

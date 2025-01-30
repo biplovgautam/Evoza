@@ -21,7 +21,7 @@ import javafx.stage.StageStyle;
 
 public class UserVerificationUI {
 
-    public static void openVerificationPopup(Stage primaryStage, String username, String email,int profileId) {
+    public static void openVerificationPopup(Stage primaryStage, Stage authStage, String username, String email, int profileId, boolean isPasswordReset) {
         Stage verificationStage = new Stage();
         verificationStage.initModality(Modality.APPLICATION_MODAL);
         verificationStage.initStyle(StageStyle.TRANSPARENT);
@@ -142,16 +142,44 @@ public class UserVerificationUI {
         submitButton.setPrefHeight(40);
         HBox.setMargin(submitButton, new Insets(20, 0, 0, 80));
 
+        
+        
         submitButton.setOnAction(e -> {
             boolean isverified = ProfileManager.verifyOTP(profileId, otpField.getText());
             if (isverified) {
-                verificationStage.close();
-                BrowserUtils.openProfileHomePage(primaryStage, profileId);
+                if (isPasswordReset) {
+                    // Show password update UI only for password reset
+                    otpField.clear();
+                    otpField.setPromptText("Enter new password");
+                    otpLabel.setText("Enter New Password*");
+                    submitButton.setText("Update Password");
+                    resendOtpText.setVisible(false);
+                    submitButton.setOnAction(ev -> {
+                        String newPassword = otpField.getText();
+                        if (newPassword != null && !newPassword.isEmpty()) {
+                            if (ProfileManager.updatePassword(profileId, newPassword)) {
+                                CustomPopupAlert.showNotification("Password updated successfully");
+                                verificationStage.close();
+                                authStage.close(); // Close authentication stage
+                                BrowserUtils.openProfileHomePage(primaryStage, profileId);
+                            } else {
+                                CustomPopupAlert.showNotification("Failed to update password");
+                            }
+                        } else {
+                            CustomPopupAlert.showNotification("Please enter a password");
+                        }
+                    });
+                } else {
+                    // For new signup, just close and proceed
+                    verificationStage.close();
+                    authStage.close();
+                    BrowserUtils.openProfileHomePage(primaryStage, profileId);
+                }
             } else {
                 CustomPopupAlert.showNotification("Invalid OTP. Please try again.");
-                System.err.println("wrong otp failed.");
             }
         });
+
         submitButton.setOnMouseEntered(e -> submitButton.setStyle("-fx-background-color: #dadada; -fx-text-fill: #000000; -fx-cursor: hand; -fx-background-radius: 50;"));
         submitButton.setOnMouseExited(e -> submitButton.setStyle("-fx-background-color: #e6e8e9; -fx-text-fill: #000000; -fx-background-radius: 50;"));
         submitbox.getChildren().addAll(resendOtpText,submitButton);

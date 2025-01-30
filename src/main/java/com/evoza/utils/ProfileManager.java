@@ -155,7 +155,21 @@ public class ProfileManager {
         }
     }
 
-
+    public static boolean updatePassword(int profileId, String newPassword) {
+        String query = "UPDATE profiles SET pass = ? WHERE profile_id = ?";
+        try (Connection connection = DatabaseHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            
+            statement.setString(1, newPassword);
+            statement.setInt(2, profileId);
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Failed to update password: " + e.getMessage());
+            return false;
+        }
+    }
 
     public static boolean verifyOTP(int profileId, String otp) {
         String query = "SELECT otp_nbr FROM OTPs WHERE profile_id = ?";
@@ -195,5 +209,49 @@ public class ProfileManager {
         }
         return null; // Return null if profile ID not found or an error occurs
     }
+    // Add these methods to ProfileManager.java
+
+public static Profiles getProfileById(int profileId) {
+    String query = "SELECT * FROM profiles WHERE profile_id = ?";
+    try (Connection conn = DatabaseHelper.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setInt(1, profileId);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return new Profiles(
+                rs.getInt("profile_id"),
+                rs.getString("username"),
+                rs.getString("fullname"),
+                rs.getString("email"),
+                rs.getString("pass"),
+                rs.getInt("profile_pic")
+            );
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching profile: " + e.getMessage());
+    }
+    return null;
+}
+
+public static boolean updateProfile(int profileId, String fullname, String email, String newPassword) {
+    String query = "UPDATE profiles SET fullname = ?, email = ?" + 
+                  (newPassword != null && !newPassword.isEmpty() ? ", pass = ?" : "") +
+                  " WHERE profile_id = ?";
+    try (Connection conn = DatabaseHelper.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setString(1, fullname);
+        stmt.setString(2, email);
+        if (newPassword != null && !newPassword.isEmpty()) {
+            stmt.setString(3, newPassword);
+            stmt.setInt(4, profileId);
+        } else {
+            stmt.setInt(3, profileId);
+        }
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Error updating profile: " + e.getMessage());
+        return false;
+    }
+}
 
 }

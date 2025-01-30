@@ -1,6 +1,7 @@
 CREATE DATABASE evoza;
 USE evoza;
 
+
 -- Create the tables for the database
 CREATE TABLE avatars (
   avatar_id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -9,7 +10,7 @@ CREATE TABLE avatars (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
---create profiles table
+-- create profiles table
 CREATE TABLE profiles (
   profile_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(255),
@@ -29,12 +30,14 @@ CREATE TABLE bookmarks (
   weburl VARCHAR(2083)
 );
 
+
 CREATE TABLE histories (
   history_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   profile_id INTEGER,
-  weburl VARCHAR(2083),
+  weburl VARCHAR(767),
   title VARCHAR(255),
-  visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_history (profile_id, weburl(767))
 );
 
 CREATE TABLE sessions (

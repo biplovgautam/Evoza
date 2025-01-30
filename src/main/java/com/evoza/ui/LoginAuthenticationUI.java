@@ -97,12 +97,8 @@ public class LoginAuthenticationUI {
         HBox.setMargin(forgotpassText, new Insets(-5, 10, 0, 20));
 
         forgotpassText.setOnMouseClicked(e -> {
-            
-            // Open the UserVerificationUI for OTP verification
-            UserVerificationUI.openVerificationPopup(primaryStage, username, email, profileId);
-            
-
-
+            UserVerificationUI.openVerificationPopup(primaryStage, authStage, username, email, profileId, true);
+            // Pass true to indicate this is password reset verification
         });
 
         Button submitButton = new Button("Login");

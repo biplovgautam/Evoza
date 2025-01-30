@@ -1,5 +1,6 @@
 package com.evoza.ui;
 
+import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -23,8 +24,11 @@ import javafx.scene.shape.Rectangle;
 
 import com.evoza.EvozaApp;
 import com.evoza.ui.CustomHomepageTemp;
+import com.evoza.utils.AvatarFetcher;
 import com.evoza.utils.BookmarkUtils;
+import com.evoza.utils.HistoryManager;
 import com.evoza.utils.ProfileManager;
+import com.evoza.utils.Profiles;
 import com.evoza.utils.SessionUtils;
 
 import java.io.InputStream;
@@ -50,10 +54,15 @@ public class BrowserInterface {
     private static final int MAX_TABS = 6;
     private int profileId;
 
+
+    private static BrowserInterface instance;
+
+
     
 
     public void start(Stage profileStage, int profileId) {
         this.profileId = profileId;
+        instance = this;
 
 
 
@@ -108,22 +117,36 @@ public class BrowserInterface {
         toolbar.setPadding(new Insets(10));
         toolbar.setStyle("-fx-background-color: #d9d9d9;");
 
-        Image profileIcon = new Image(getClass().getResourceAsStream("/images/icons/user.png"), 22, 22, true, true);
+        // Replace static profile icon with dynamic avatar
+        Profiles currentProfile = ProfileManager.getProfileById(profileId);
+        Image profileIcon;
+
+        if (currentProfile != null) {
+            Image avatarImage = AvatarFetcher.fetchAvatarById(currentProfile.getProfilePicId());
+            if (avatarImage != null) {
+                profileIcon = avatarImage;
+            } else {
+                // Fallback to default icon if avatar not found
+                profileIcon = new Image(getClass().getResourceAsStream("/images/icons/user.png"), 22, 22, true, true);
+            }
+        } else {
+            // Fallback to default icon if profile not found
+            profileIcon = new Image(getClass().getResourceAsStream("/images/icons/user.png"), 22, 22, true, true);
+        }
+
         Button profileButton = createIconButton(profileIcon, "profile", 20, 20);
         profileButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;");
         profileButton.setOnMouseEntered(e -> profileButton.setStyle("-fx-background-color:rgba(85, 85, 85, 0.33); -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
         profileButton.setOnMouseExited(e -> profileButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-border-radius: 50px; -fx-background-radius: 50px;"));
-        
-        
+                
         ContextMenu profileMenu = new ContextMenu();
         MenuItem profileMenuItem = new MenuItem("Profile");
         MenuItem logoutMenuItem = new MenuItem("Logout");
 
+        // Update profile menu item action
         profileMenuItem.setOnAction(e -> {
-            // Open profile settings or page
-            System.out.println("Profile clicked");
+            ProfileSettingsUI.openProfileSettings(BrowserStage, profileId);
         });
-
         logoutMenuItem.setOnAction(e -> {
             // Clear session and redirect to login page
             CustomPopupAlert.showConfirmation("Are you sure you want to logout this profile?", confirmed -> {
@@ -228,7 +251,8 @@ public class BrowserInterface {
                 CustomPopupAlert.showNotification("Please login to see history.");
                 return;
             }else{
-                // logic to show downloads if any
+                // logic to show history if any
+                HistoryShowUI.openHistoryShow(BrowserStage, profileId);
             }
         });
 
@@ -314,15 +338,22 @@ public class BrowserInterface {
         // Set the HBox as the graphic for the tab button
         tabButton.setGraphic(tabContent);
     
-        // Create a new WebView
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
             
         // Set user-agent to mimic a modern browser
         webEngine.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36");
-            
-        // Enable JavaScript
-        webEngine.setJavaScriptEnabled(true);
+        
+        // Add history tracking
+        webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                String url = webEngine.getLocation();
+                String title = webEngine.getTitle();
+                if (profileId != -1) { // Don't save history for guest mode
+                    HistoryManager.saveVisit(profileId, url, title);
+                }
+            }
+        });
             
         // Load a website
         // yahoo, google, bing, 
@@ -353,6 +384,14 @@ public class BrowserInterface {
         contentArea.getChildren().add(webView);
         switchToTab(tabButton);
         
+    }
+
+    public static void openUrlInNewTab(String url) {
+        if (instance == null) {
+            System.err.println("Browser not initialized");
+            return;
+        }
+        instance.addNewTabWithUrl(url);
     }
 
 
