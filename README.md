@@ -5,6 +5,14 @@
 
 Evoza Web Browser is a project developed for the LED2 course in the 2nd semester at our college. This application is designed to provide a simple and efficient web browsing experience with a custom user interface. The project is developed by a team of five members.
 
+## Browser Interface
+
+![Evoza Browser Interface](browserinterface.png)
+
+## Saving Bookmark
+![Saving Bookmark](Screenshot.png)
+
+
 ## Team Members
 
 - Biplov Gautam (Scrum Master, Backend Developer, Sometimes Frontend as well)
@@ -106,6 +114,5 @@ The custom title bar includes the application logo, title, and window control bu
 ## Contributions
 
 All team members contributed to the development of the Evoza Web Browser. Special thanks to Biplov Gautam for leading the team as the Scrum Master.
-
 
 
