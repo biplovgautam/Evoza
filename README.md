@@ -12,6 +12,10 @@ Evoza Web Browser is java.javafx based desktop application developed using javaf
 ## Saving Bookmark
 ![Saving Bookmark](Screenshot.png)
 
+## Demo Video
+
+Watch the demo video on YouTube: [EVOZA YT video](https://youtu.be/1vTi7G_V2_U?si=dVVuIFzAOAWRvUBh)
+
 
 ## Team Members
 
