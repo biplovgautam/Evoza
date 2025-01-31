@@ -3,7 +3,7 @@
 
 ## Overview
 
-Evoza Web Browser is a project developed for the LED2 course in the 2nd semester at our college. This application is designed to provide a simple and efficient web browsing experience with a custom user interface. The project is developed by a team of five members.
+Evoza Web Browser is java.javafx based desktop application developed using javafx webview for rendring urls. This application is designed to provide a simple and efficient web browsing experience with a custom user interface.
 
 ## Browser Interface
 
@@ -15,10 +15,10 @@ Evoza Web Browser is a project developed for the LED2 course in the 2nd semester
 
 ## Team Members
 
-- Biplov Gautam (Scrum Master, Backend Developer, Sometimes Frontend as well)
-- Sabin Raj Pokhreal (Backend & Frontend developer)
+- Biplov Gautam (Scrum Master/Developer)
+- Sabin Raj Pokhreal (Frontend developer and Backend)
 - Kalina Shrestha (Frontend developer and UI/UX designer)
-- Rohit shah (Backend & SQL, database)
+- Rohit shah (SQL database)
 - Prochorus Rai (Tester)
 
 ## Features
@@ -26,8 +26,8 @@ Evoza Web Browser is a project developed for the LED2 course in the 2nd semester
 - Different profiles for different users in same desktop
 - Guest mode to save bookmarks and browsing histories without logging in!
 - private / incognito mode to browse without saving data
-- Custom title bar with minimize, maximize, and close buttons
-- Customizable dark theme
+- Custom title bar
+
 - Modular design with separate UI components
 
 ## Project Structure
@@ -58,9 +58,9 @@ Evoza/
 ├── test/
 │   ├── java/
 │   │   ├── com/
-│   │   │   ├── evoza/
-│   │   │   │   ├── browser/
-│   │   │   │   ├── profile/
+│   │   │   ├── test/
+│   │   │   │   ├── TestLauncher.java
+│   │   │   │   ├── profileTest.java
 ├── lib/
 ├── config/
 │   ├── browser.properties
